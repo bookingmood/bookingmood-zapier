@@ -1,11 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2019",
+    "exactOptionalPropertyTypes": true,
+    "lib": ["esnext"],
     "module": "commonjs",
     "moduleResolution": "node",
-    "lib": ["esnext"],
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
     "outDir": "./lib",
     "rootDir": "./src",
-    "strict": true
+    "strict": true,
+    "target": "es2019"
   }
 }

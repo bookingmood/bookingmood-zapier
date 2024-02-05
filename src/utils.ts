@@ -1,4 +1,4 @@
-import type { OpenAPIProperty, OpenAPISpec } from "./types";
+import { OpenAPIParameter, OpenAPIProperty } from "./types/open-api";
 
 export const accessibleMethods: Record<string, Array<string>> = {
   attribute_options: ["get", "post", "patch", "delete"],
@@ -75,4 +75,17 @@ export function getExampleValue(property: OpenAPIProperty) {
   if (property.format === "tsmultirange") return property.default ?? "{}";
 
   return null;
+}
+
+export function isStandardParameter(parameter: OpenAPIParameter) {
+  return (
+    parameter.name === "select" ||
+    parameter.name === "offset" ||
+    (parameter.name === "order" && parameter.description === "Ordering") ||
+    parameter.name === "limit"
+  );
+}
+
+export function just<T>(x: T | undefined): Array<T> {
+  return x === undefined ? [] : [x];
 }
