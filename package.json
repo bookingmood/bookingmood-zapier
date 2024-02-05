@@ -1,0 +1,23 @@
+{
+  "name": "bookingmood-zapier",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "yarn clean && tsc",
+    "clean": "rimraf ./lib ./build",
+    "test": "yarn build && jest --testTimeout 10000 --rootDir ./lib/test",
+    "watch": "yarn clean && tsc --watch"
+  },
+  "dependencies": {
+    "zapier-platform-core": "15.5.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.16",
+    "jest": "^29.6.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  },
+  "private": true
+}
