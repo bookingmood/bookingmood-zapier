@@ -1,7 +1,7 @@
 {
   "name": "bookingmood-zapier",
   "version": "1.0.0",
-  "description": "",
+  "description": "Bookingmood Zapier integration specification",
   "main": "index.js",
   "scripts": {
     "build": "yarn clean && tsc",

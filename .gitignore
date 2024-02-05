@@ -16,10 +16,14 @@ node_modules/
 
 # environment variables file
 .env
-.environment
+.env.local
 
 # Build files
 lib/
 
 # Zapier RC file
 .zapierapprc
+
+# Yarn 2
+.yarn/
+
