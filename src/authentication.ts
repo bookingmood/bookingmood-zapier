@@ -14,6 +14,14 @@ const authentication: ZapierAuthentication = {
       type: "string",
     },
     {
+      key: "organization_id",
+      label: "Organization ID",
+      helpText:
+        "ID of your organization in [Bookingmood](https://www.bookingmood.com/admin). Visible in the url as /admin/organizations/{{organization_id}}/...",
+      required: true,
+      type: "string",
+    },
+    {
       key: "api_key",
       label: "API key",
       helpText:

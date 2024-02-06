@@ -67,7 +67,9 @@ export type ZapierFieldChoiceWithLabel = {
 };
 
 /** Reference a resource by key and the data it returns. In the format of: `{resource_key}.{foreign_key}(.{human_label_key})`. */
-export type ZapierRefResource = `${string}.${string}(.${string})`;
+export type ZapierRefResource =
+  | `${string}.${string}.${string}`
+  | `${string}.${string}`;
 
 /** A static dropdown of options. Which you use depends on your order and label requirements:\n\nNeed a Label? | Does Order Matter? | Type to Use\n---|---|---\nYes | No | Object of value -> label\nNo | Yes | Array of Strings\nYes | Yes | Array of [FieldChoiceWithLabel](#Zapierfieldchoicewithlabel) */
 export type ZapierFieldChoices =
@@ -240,7 +242,7 @@ export type ZapierAuthenticationSessionConfig = {
 
 /** Represents an array of fields or functions. */
 export type ZapierFieldOrFunction = Array<
-  ZapierField | ZapierFunction<() => unknown>
+  ZapierField | ZapierFunction<(z: ZObject, bundle: Bundle) => ZapierField>
 >;
 
 /** Like [/ZapierFields](#Zapierfields) but you can provide functions to create dynamic or custom fields. */
@@ -340,7 +342,9 @@ export type ZapierBasicPollingOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`. */
-  perform: ZapierRequest | ZapierFunction<() => unknown>;
+  perform:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** Does this endpoint support pagination via temporary cursor storage? */
   canPaginate?: boolean | undefined;
   /** What should the form a user sees and configures look like? */

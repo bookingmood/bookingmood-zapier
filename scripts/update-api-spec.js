@@ -9,7 +9,12 @@ async function fetchAPISpec() {
     },
   });
   const json = await res.json();
-  fs.writeFileSync("data/api-spec.json", JSON.stringify(json, null, 2));
+  fs.writeFileSync(
+    "src/data/api-spec.ts",
+    `import { OpenAPISpec } from "../types/open-api";
+
+export const spec: OpenAPISpec = ${JSON.stringify(json, null, 2)};`
+  );
 }
 
 fetchAPISpec();

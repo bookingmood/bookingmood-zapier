@@ -1,6 +1,6 @@
 import { firstBy } from "thenby";
 
-import { accessibleMethods } from "./data/accessible-methods";
+import { accessibleMethods, labelColumns } from "./data/accessible-methods";
 import { spec } from "./data/api-spec";
 import { baseUrl } from "./data/constants";
 import { OpenAPIParameter } from "./types/open-api";
@@ -12,6 +12,7 @@ import {
   isStandardParameter,
 } from "./utils/resources";
 import { capitalCase, noCase, sentenceCase } from "./utils/strings";
+import { Bundle, ZObject } from "zapier-platform-core";
 
 const specEnums = Object.values(spec.definitions)
   .flatMap((table) => Object.values(table.properties))
@@ -49,7 +50,7 @@ for (const table of Object.keys(spec.definitions)
     create: methods.includes("post")
       ? {
           display: {
-            label: `Create ${sentenceCase(table)}`,
+            label: `Create ${capitalCase(table).replace(" To ", "-To ")}`,
             description: `Create a new ${noCase(table)}`,
           },
           operation: {
@@ -60,9 +61,20 @@ for (const table of Object.keys(spec.definitions)
                   identifier !== "id" &&
                   identifier !== "created_at" &&
                   identifier !== "updated_at" &&
-                  identifier !== "deleted_at"
+                  identifier !== "deleted_at" &&
+                  identifier !== "uid"
               )
               .map(([identifier, property]) => {
+                if (identifier === "organization_id")
+                  return (z, bundle) => ({
+                    key: "organization_id",
+                    label: "Organization",
+                    required: true,
+                    type: "string",
+                    computed: true,
+                    default: bundle.authData["organization_id"],
+                  });
+
                 const enumValue = specEnums[property.format ?? ""];
 
                 const field: ZapierField = {
@@ -115,13 +127,47 @@ for (const table of Object.keys(spec.definitions)
                   field.dict = true;
                 } else field.type = "string";
 
+                if (identifier.endsWith("_id")) {
+                  const fkRegex = /<fk table='(.*?)' column='(.*?)'\/>/g;
+                  const match = fkRegex.exec(property.description ?? "");
+                  const fkTable = match?.[1];
+                  const fkColumn = match?.[2];
+
+                  if (fkTable && fkColumn && labelColumns[fkTable])
+                    field.dynamic = `${fkTable}List.${fkColumn}.${labelColumns[fkTable]}`;
+                }
+
                 return field;
               }),
             async perform(z, bundle) {
               const res = await z.request({
                 method: "POST",
                 url: `${baseUrl}/${table}`,
+                params: { select: "*" },
                 body: bundle.inputData,
+              });
+              return res.data;
+            },
+          },
+        }
+      : undefined,
+    list: methods.includes("get")
+      ? {
+          display: {
+            label: `List ${capitalCase(table).replace(" To ", "-To ")}`,
+            description: `List all ${noCase(table)}`,
+            hidden: true,
+          },
+          operation: {
+            canPaginate: true,
+            type: "polling",
+            perform: async (z, bundle) => {
+              const res = await z.request({
+                url: `${baseUrl}/${table}`,
+                params: {
+                  offset: bundle.meta.page,
+                  limit: bundle.meta.limit === -1 ? 1000 : bundle.meta.limit,
+                },
               });
               return res.data;
             },
@@ -131,14 +177,21 @@ for (const table of Object.keys(spec.definitions)
     search: methods.includes("get")
       ? {
           display: {
-            label: `List ${capitalCase(table)}`,
-            description: `Search and filter ${noCase(table)}`,
+            label: `Search ${capitalCase(table).replace(" To ", "-To ")}`,
+            description: `Search ${noCase(table)}`,
           },
           operation: {
             inputFields: [
               ...(
                 searchParameters
-                  ?.filter((p) => p.in === "query" && !isStandardParameter(p))
+                  ?.filter(
+                    (p) =>
+                      p.in === "query" &&
+                      p.name !== "order" &&
+                      p.name !== "ac_id" &&
+                      p.name !== "uid" &&
+                      !isStandardParameter(p)
+                  )
                   .sort(
                     firstBy<OpenAPIParameter>((p) =>
                       p.name === "id"
@@ -155,20 +208,93 @@ for (const table of Object.keys(spec.definitions)
                     ).thenBy((p) => p.name)
                   ) ?? []
               ).map((parameter) => {
+                if (
+                  (parameter.name === "id" ||
+                    (parameter.name === "user_id" &&
+                      table === "user_profiles")) &&
+                  labelColumns[table]
+                )
+                  return {
+                    key: parameter.name,
+                    label: sentenceCase(parameter.name),
+                    helpText: parameter.description,
+                    required: parameter.required,
+                    type: "string",
+                    dynamic: `${table}List.${parameter.name}.${labelColumns[table]}`,
+                  } as ZapierField;
+
+                if (parameter.name === "organization_id")
+                  return (z: ZObject, bundle: Bundle) =>
+                    ({
+                      key: "organization_id",
+                      label: "Organization",
+                      required: true,
+                      type: "string",
+                      computed: true,
+                      default: bundle.authData["organization_id"],
+                    } as ZapierField);
+
+                if (parameter.name.endsWith("_id")) {
+                  const property = model?.properties[parameter.name];
+
+                  const fkRegex = /<fk table='(.*?)' column='(.*?)'\/>/g;
+                  const match = fkRegex.exec(property?.description ?? "");
+                  const fkTable = match?.[1];
+                  const fkColumn = match?.[2];
+
+                  if (fkTable && fkColumn && labelColumns[fkTable])
+                    return {
+                      key: parameter.name,
+                      label: sentenceCase(parameter.name),
+                      helpText: parameter.description,
+                      required: parameter.required,
+                      type: "string",
+                      list: true,
+                      dynamic: `${fkTable}List.${fkColumn}.${labelColumns[fkTable]}`,
+                    } as ZapierField;
+                }
+
                 const enumValue = specEnums[parameter.format ?? ""];
+
                 const field: ZapierField = {
                   key: parameter.name,
                   label: sentenceCase(parameter.name),
                   required: parameter.required,
                   type: "string",
-                  helpText: `${parameter.description} Filter<${
+                  helpText: `${parameter.description} (${
                     enumValue
                       ? enumValue.map((v) => `"${v}"`).join(", ")
                       : parameter.format
-                  }>. See [our API reference](https://www.bookingmood.com/en-US/api-reference#filtering) for all filter options`,
+                  })`,
                 };
+
+                if (
+                  parameter.format === "integer" ||
+                  parameter.type === "integer"
+                )
+                  field.type = "integer";
+                if (
+                  parameter.format === "number" ||
+                  parameter.type === "number"
+                )
+                  field.type = "number";
+                if (
+                  parameter.format === "timestamp with time zone" ||
+                  parameter.format === "timestamp without time zone"
+                )
+                  field.type = "datetime";
+                if (parameter.format === "boolean") field.type = "boolean";
+                if (parameter.format === "boolean[]") {
+                  field.type = "boolean";
+                  field.list = true;
+                }
+                if (parameter.format === "text[]") {
+                  field.type = "string";
+                  field.list = true;
+                }
+
                 const example = enumValue?.[0] ?? getParamExample(parameter);
-                if (example) field.placeholder = `eq.${example}`;
+                if (example) field.placeholder = example;
 
                 return field;
               }),
@@ -221,9 +347,18 @@ for (const table of Object.keys(spec.definitions)
               },
             ],
             async perform(z, bundle) {
+              const params: Record<string, unknown> = {};
+              for (const [key, value] of Object.entries(bundle.inputData))
+                params[key] =
+                  key.endsWith("_id") &&
+                  Array.isArray(value) &&
+                  value.length > 0
+                    ? `in.${value.join(",")}`
+                    : `eq.${value}`;
+
               const res = await z.request({
                 url: `${baseUrl}/${table}`,
-                params: bundle.inputData,
+                params,
               });
               return res.data;
             },

@@ -17858,7 +17858,7 @@ export const spec: OpenAPISpec = {
         },
         email_template_id: {
           description:
-            "Identifier of the email template this email is based on",
+            "Identifier of the email template this email is based on\n\nNote:\nThis is a Foreign Key to `email_templates.id`.<fk table='email_templates' column='id'/>",
           format: "uuid",
           type: "string",
         },
