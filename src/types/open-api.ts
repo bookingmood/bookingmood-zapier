@@ -1,5 +1,7 @@
 export type OpenAPIMethod = {
-  parameters: Array<{ $ref: `#/parameters/${string}` }>;
+  description?: string;
+  parameters?: Array<{ $ref: `#/parameters/${string}` } | object>;
+  produces?: Array<string>;
   responses: Record<
     string,
     {
@@ -12,7 +14,8 @@ export type OpenAPIMethod = {
 };
 
 export type OpenAPIParameter = {
-  description: string;
+  default?: string;
+  description?: string;
   enum?: Array<string>;
   format?: string;
   in: "query" | "header" | "body";
@@ -25,15 +28,29 @@ export type OpenAPIParameter = {
 export type OpenAPIProperty = {
   default?: unknown;
   description?: string;
-  enum?: Array<string>;
-  format: string;
-  type?: string;
-};
+} & (
+  | {
+      items: OpenAPIProperty;
+      format: string;
+      type: "array";
+    }
+  | {
+      enum?: Array<string>;
+      format?: string;
+      type?: string;
+    }
+  | {
+      format?: string;
+      maxLength?: number;
+      type: "string";
+    }
+);
 
 export type OpenAPIDefinition = {
   description?: string;
   required?: Array<string>;
   properties: Record<string, OpenAPIProperty>;
+  type?: "object";
 };
 
 export type OpenAPISpec = {
@@ -46,7 +63,7 @@ export type OpenAPISpec = {
   parameters: Record<string, OpenAPIParameter>;
   paths: Record<
     string,
-    Record<"get" | "post" | "delete" | "patch", OpenAPIMethod>
+    { [method in "get" | "post" | "delete" | "patch"]?: OpenAPIMethod }
   >;
   produces: Array<string>;
   schemes: Array<string>;

@@ -1,5 +1,3 @@
-import { OpenAPIParameter, OpenAPIProperty } from "./types/open-api";
-
 export const accessibleMethods: Record<string, Array<string>> = {
   attribute_options: ["get", "post", "patch", "delete"],
   attributes: ["get", "post", "patch", "delete"],
@@ -55,37 +53,3 @@ export const accessibleMethods: Record<string, Array<string>> = {
   widget_views: ["get", "post", "patch", "delete"],
   widgets: ["get", "post", "patch", "delete"],
 };
-
-export function getExampleValue(property: OpenAPIProperty) {
-  if (property.enum !== undefined) return property.default ?? property.enum[0];
-  if (property.format === "uuid") return "00000000-0000-0000-0000-000000000000";
-  if (property.format === "text") return property.default ?? "";
-  if (property.format === "timestamp with time zone")
-    return new Date().toISOString();
-  if (property.format === "timestamp without time zone")
-    return new Date().toISOString().replace("Z", "");
-  if (property.format === "boolean") return property.default ?? false;
-  if (property.type === "integer") return property.default ?? 0;
-  if (property.type === "number") return property.default ?? 0.0;
-  if (property.format === "text[]") return property.default ?? [""];
-  if (property.format === "boolean[]") return property.default ?? [false];
-  if (property.format === "jsonb") return property.default ?? {};
-  if (property.format === "tsvector") return property.default ?? "";
-  if (property.format === "tsrange") return property.default ?? "[)";
-  if (property.format === "tsmultirange") return property.default ?? "{}";
-
-  return null;
-}
-
-export function isStandardParameter(parameter: OpenAPIParameter) {
-  return (
-    parameter.name === "select" ||
-    parameter.name === "offset" ||
-    (parameter.name === "order" && parameter.description === "Ordering") ||
-    parameter.name === "limit"
-  );
-}
-
-export function just<T>(x: T | undefined): Array<T> {
-  return x === undefined ? [] : [x];
-}

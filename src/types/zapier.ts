@@ -1,4 +1,4 @@
-import type { Bundle, ZObject } from "zapier-platform-core";
+import type { Bundle, HttpRequestOptions, ZObject } from "zapier-platform-core";
 
 /** Represents a full app. */
 export type ZapierApp = {
@@ -7,17 +7,29 @@ export type ZapierApp = {
   /** A version identifier for the Zapier execution environment. */
   platformVersion: ZapierVersion;
   /** EXPERIMENTAL: Before the perform method is called on your app, you can modify the execution context. */
-  beforeApp?: ZapierMiddlewares | undefined;
+  beforeApp?:
+    | ZapierMiddlewares<(z: ZObject, bundle: Bundle) => unknown>
+    | undefined;
   /** EXPERIMENTAL: After the perform method is called on your app, you can modify the response. */
-  afterApp?: ZapierMiddlewares | undefined;
+  afterApp?:
+    | ZapierMiddlewares<(z: ZObject, bundle: Bundle) => unknown>
+    | undefined;
   /** Choose what scheme your API uses for authentication. */
   authentication?: ZapierAuthentication | undefined;
   /** Define a request mixin, great for setting custom headers, content-types, etc. */
   requestTemplate?: ZapierRequest | undefined;
   /** Before an HTTP request is sent via our `z.request()` client, you can modify it. */
-  beforeRequest?: ZapierMiddlewares | undefined;
+  beforeRequest?:
+    | ZapierMiddlewares<
+        (request: HttpRequestOptions, z: ZObject, bundle: Bundle) => unknown
+      >
+    | undefined;
   /** After an HTTP response is recieved via our `z.request()` client, you can modify it. */
-  afterResponse?: ZapierMiddlewares | undefined;
+  afterResponse?:
+    | ZapierMiddlewares<
+        (request: HttpRequestOptions, z: ZObject, bundle: Bundle) => unknown
+      >
+    | undefined;
   /** An optional bank of named functions that you can use in `z.hydrate('someName')` to lazily load data. */
   hydrators?: ZapierHydrators | undefined;
   /** All the resources for your app. Zapier will take these and generate the relevent triggers/searches/creates automatically. */
@@ -127,9 +139,9 @@ export type ZapierFunctionSource = {
 export type ZapierFlatObject = Record<string, null | string | number | boolean>;
 
 /** Internal pointer to a function from the original source or the source code itself. Encodes arity and if `arguments` is used in the body. Note - just write normal functions and the system will encode the pointers for you. Or, provide {source: "return 1 + 2"} and the system will wrap in a function for you. */
-export type ZapierFunction =
+export type ZapierFunction<T extends Function> =
   | string
-  | ((z: ZObject, bundle: Bundle) => unknown)
+  | T
   | ZapierFunctionRequire
   | ZapierFunctionSource;
 
@@ -157,7 +169,7 @@ export type ZapierRequest = {
       }
     | undefined;
   /** A function to customize how to serialize a value for curlies `{{var}}` in the request object. By default, when this is unspecified, the request client only replaces curlies where variables are strings, and would throw an error for non-strings. The function should accepts a single argument as the value to be serialized and return the string representation of the argument. */
-  serializeValueForCurlies?: ZapierFunction | undefined;
+  serializeValueForCurlies?: ZapierFunction<() => unknown> | undefined;
   /** If `true`, don't throw an exception for response 400 <= status < 600 automatically before resolving with the response. Defaults to `false`. */
   skipThrowForStatus?: boolean | undefined;
   /** Contains the characters that you want left unencoded in the query params (`req.params`). If unspecified, `z.request()` will percent-encode non-ascii characters and these reserved characters: ``:$/?#[]@$&+,;=^@`\\``. */
@@ -183,7 +195,7 @@ export type ZapierAuthenticationBasicConfig = { [x: string]: never };
 /** Config for custom authentication (like API keys). No extra properties are required to setup this auth type, so you can leave this empty if your app uses a custom auth method. */
 export type ZapierAuthenticationCustomConfig = {
   /** EXPERIMENTAL: Define the call Zapier should make to send the OTP code. */
-  sendCode?: ZapierRequest | ZapierFunction | undefined;
+  sendCode?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
 };
 
 /** Config for Digest Authentication. No extra properties are required to setup Digest Auth, so you can leave this empty if your app uses Digets Auth. */
@@ -192,21 +204,24 @@ export type ZapierAuthenticationDigestConfig = { [x: string]: never };
 /** Config for OAuth1 authentication. */
 export type ZapierAuthenticationOAuth1Config = {
   /** Define where Zapier will acquire a request token which is used for the rest of the three legged authentication process. */
-  getRequestToken: ZapierRequest | ZapierFunction;
+  getRequestToken: ZapierRequest | ZapierFunction<() => unknown>;
   /** Define where Zapier will redirect the user to authorize our app. Typically, you should append an `oauth_token` querystring parameter to the request. */
-  authorizeUrl: ZapierRedirectRequest | ZapierFunction;
+  authorizeUrl: ZapierRedirectRequest | ZapierFunction<() => unknown>;
   /** Define how Zapier fetches an access token from the API */
-  getAccessToken: ZapierRequest | ZapierFunction;
+  getAccessToken: ZapierRequest | ZapierFunction<() => unknown>;
 };
 
 /** Config for OAuth2 authentication. */
 export type ZapierAuthenticationOAuth2Config = {
   /** Define where Zapier will redirect the user to authorize our app. Note: we append the redirect URL and state parameters to return value of this function. */
-  authorizeUrl: ZapierRedirectRequest | ZapierFunction;
+  authorizeUrl: ZapierRedirectRequest | ZapierFunction<() => unknown>;
   /** Define how Zapier fetches an access token from the API */
-  getAccessToken: ZapierRequest | ZapierFunction;
+  getAccessToken: ZapierRequest | ZapierFunction<() => unknown>;
   /** Define how Zapier will refresh the access token from the API */
-  refreshAccessToken?: ZapierRequest | ZapierFunction | undefined;
+  refreshAccessToken?:
+    | ZapierRequest
+    | ZapierFunction<() => unknown>
+    | undefined;
   /** Define a non-standard code param Zapier should scrape instead. */
   codeParam?: string | undefined;
   /** What scope should Zapier request? */
@@ -220,11 +235,13 @@ export type ZapierAuthenticationOAuth2Config = {
 /** Config for session authentication. */
 export type ZapierAuthenticationSessionConfig = {
   /** Define how Zapier fetches the additional authData needed to make API calls. */
-  perform: ZapierRequest | ZapierFunction;
+  perform: ZapierRequest | ZapierFunction<() => unknown>;
 };
 
 /** Represents an array of fields or functions. */
-export type ZapierFieldOrFunction = Array<ZapierField | ZapierFunction>;
+export type ZapierFieldOrFunction = Array<
+  ZapierField | ZapierFunction<() => unknown>
+>;
 
 /** Like [/ZapierFields](#Zapierfields) but you can provide functions to create dynamic or custom fields. */
 export type ZapierDynamicFields = ZapierFieldOrFunction;
@@ -272,7 +289,9 @@ export type ZapierBasicOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`. */
-  perform: ZapierRequest | ZapierFunction;
+  perform:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;
   /** What fields of data will this return? Will use resource outputFields if missing, will also use sample if available. */
@@ -292,15 +311,18 @@ export type ZapierBasicHookOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** A function that processes the inbound webhook request. */
-  perform: ZapierFunction;
+  perform: ZapierFunction<() => unknown>;
   /** Fetch a list of items on demand during testing instead of waiting for a hook. You can also consider resources and their built-in hook/list methods. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, this is strongly recommended for testing REST Hooks. Otherwise, you can ignore warnings about this property with the `--without-style` flag during `zapier push`. */
-  performList?: ZapierRequest | ZapierFunction | undefined;
+  performList?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
   /** Does this endpoint support pagination via temporary cursor storage? */
   canPaginate?: boolean | undefined;
   /** Takes a URL and any necessary data from the user and subscribes. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, this is strongly recommended for testing REST Hooks. Otherwise, you can ignore warnings about this property with the `--without-style` flag during `zapier push`. */
-  performSubscribe?: ZapierRequest | ZapierFunction | undefined;
+  performSubscribe?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
   /** Takes a URL and data from a previous subscribe call and unsubscribes. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, this is strongly recommended for testing REST Hooks. Otherwise, you can ignore warnings about this property with the `--without-style` flag during `zapier push`. */
-  performUnsubscribe?: ZapierRequest | ZapierFunction | undefined;
+  performUnsubscribe?:
+    | ZapierRequest
+    | ZapierFunction<() => unknown>
+    | undefined;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;
   /** What fields of data will this return? Will use resource outputFields if missing, will also use sample if available. */
@@ -318,7 +340,7 @@ export type ZapierBasicPollingOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`. */
-  perform: ZapierRequest | ZapierFunction;
+  perform: ZapierRequest | ZapierFunction<() => unknown>;
   /** Does this endpoint support pagination via temporary cursor storage? */
   canPaginate?: boolean | undefined;
   /** What should the form a user sees and configures look like? */
@@ -336,11 +358,13 @@ export type ZapierBasicActionOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`. */
-  perform: ZapierRequest | ZapierFunction;
+  perform:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** A function that parses data from a perform (which uses z.generateCallbackUrl()) and callback request to resume this action. */
-  performResume?: ZapierFunction | undefined;
+  performResume?: ZapierFunction<() => unknown> | undefined;
   /** How will Zapier get a single record? If you find yourself reaching for this - consider resources and their built-in get methods. */
-  performGet?: ZapierRequest | ZapierFunction | undefined;
+  performGet?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;
   /** What fields of data will this return? Will use resource outputFields if missing, will also use sample if available. */
@@ -432,13 +456,13 @@ export type ZapierBasicHookToPollOperation = {
   /** Must be explicitly set to `"hook_to_poll"`. */
   type?: "hook_to_poll" | undefined;
   /** Similar a polling trigger, but checks for new data when a webhook is received, instead of every few minutes */
-  performList: ZapierRequest | ZapierFunction;
+  performList: ZapierRequest | ZapierFunction<() => unknown>;
   /** Does this endpoint support pagination via temporary cursor storage? */
   canPaginate?: boolean | undefined;
   /** Takes a URL and any necessary data from the user and subscribes. */
-  performSubscribe: ZapierRequest | ZapierFunction;
+  performSubscribe: ZapierRequest | ZapierFunction<() => unknown>;
   /** Takes a URL and data from a previous subscribe call and unsubscribes. */
-  performUnsubscribe: ZapierRequest | ZapierFunction;
+  performUnsubscribe: ZapierRequest | ZapierFunction<() => unknown>;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;
   /** What fields of data will this return? Will use resource outputFields if missing, will also use sample if available. */
@@ -479,11 +503,11 @@ export type ZapierBasicCreateActionOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`. */
-  perform: ZapierRequest | ZapierFunction;
+  perform: ZapierRequest | ZapierFunction<() => unknown>;
   /** A function that parses data from a perform (which uses z.generateCallbackUrl()) and callback request to resume this action. */
-  performResume?: ZapierFunction | undefined;
+  performResume?: ZapierFunction<() => unknown> | undefined;
   /** How will Zapier get a single record? If you find yourself reaching for this - consider resources and their built-in get methods. */
-  performGet?: ZapierRequest | ZapierFunction | undefined;
+  performGet?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;
   /** What fields of data will this return? Will use resource outputFields if missing, will also use sample if available. */
@@ -536,11 +560,15 @@ export type ZapierAuthentication = {
   /** Choose which scheme you want to use. */
   type: "basic" | "custom" | "digest" | "oauth1" | "oauth2" | "session";
   /** A function or request that confirms the authentication is working. */
-  test: ZapierRequest | ZapierFunction;
+  test: ZapierRequest | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** Fields you can request from the user before they connect your app to Zapier. */
   fields?: ZapierFields | undefined;
   /** A string with variables, function, or request that returns the connection label for the authenticated user. */
-  connectionLabel?: ZapierRequest | ZapierFunction | string | undefined;
+  connectionLabel?:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>
+    | string
+    | undefined;
   basicConfig?: ZapierAuthenticationBasicConfig | undefined;
   customConfig?: ZapierAuthenticationCustomConfig | undefined;
   digestConfig?: ZapierAuthenticationDigestConfig | undefined;
@@ -571,10 +599,12 @@ export type ZapierSearchAndCreates = Record<string, ZapierSearchOrCreate>;
 export type ZapierVersion = `${number}.${number}.${number}`;
 
 /** List of before or after middlewares. Can be an array of functions or a single function */
-export type ZapierMiddlewares = ZapierFunction | Array<ZapierFunction>;
+export type ZapierMiddlewares<T extends Function> =
+  | ZapierFunction<T>
+  | Array<ZapierFunction<T>>;
 
 /** A bank of named functions that you can use in `z.hydrate('someName')` to lazily load data. */
-export type ZapierHydrators = Record<string, ZapierFunction>;
+export type ZapierHydrators = Record<string, ZapierFunction<() => unknown>>;
 
 /** Codifies high-level options for your integration. */
 export type ZapierAppFlags = {
