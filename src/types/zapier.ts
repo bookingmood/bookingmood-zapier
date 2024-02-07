@@ -313,17 +313,23 @@ export type ZapierBasicHookOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** A function that processes the inbound webhook request. */
-  perform: ZapierFunction<() => unknown>;
+  perform: ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** Fetch a list of items on demand during testing instead of waiting for a hook. You can also consider resources and their built-in hook/list methods. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, this is strongly recommended for testing REST Hooks. Otherwise, you can ignore warnings about this property with the `--without-style` flag during `zapier push`. */
-  performList?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
+  performList?:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>
+    | undefined;
   /** Does this endpoint support pagination via temporary cursor storage? */
   canPaginate?: boolean | undefined;
   /** Takes a URL and any necessary data from the user and subscribes. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, this is strongly recommended for testing REST Hooks. Otherwise, you can ignore warnings about this property with the `--without-style` flag during `zapier push`. */
-  performSubscribe?: ZapierRequest | ZapierFunction<() => unknown> | undefined;
+  performSubscribe?:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>
+    | undefined;
   /** Takes a URL and data from a previous subscribe call and unsubscribes. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, this is strongly recommended for testing REST Hooks. Otherwise, you can ignore warnings about this property with the `--without-style` flag during `zapier push`. */
   performUnsubscribe?:
     | ZapierRequest
-    | ZapierFunction<() => unknown>
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>
     | undefined;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;

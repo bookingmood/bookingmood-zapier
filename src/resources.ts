@@ -1,4 +1,5 @@
 import { firstBy } from "thenby";
+import { Bundle, ZObject } from "zapier-platform-core";
 
 import { accessibleMethods, labelColumns } from "./data/accessible-methods";
 import { spec } from "./data/api-spec";
@@ -12,7 +13,6 @@ import {
   isStandardParameter,
 } from "./utils/resources";
 import { capitalCase, noCase, sentenceCase } from "./utils/strings";
-import { Bundle, ZObject } from "zapier-platform-core";
 
 const specEnums = Object.values(spec.definitions)
   .flatMap((table) => Object.values(table.properties))

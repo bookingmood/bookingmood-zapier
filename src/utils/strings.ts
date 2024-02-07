@@ -128,6 +128,26 @@ export function sentenceCase(input: string, options?: Options) {
   );
 }
 
+/**
+ * Convert a string to camel case (`fooBar`).
+ */
+export function camelCase(input: string, options: PascalCaseOptions = {}) {
+  const [prefix, words, suffix] = splitPrefixSuffix(input, options);
+  const lower = lowerFactory(options.locale);
+  const upper = upperFactory(options.locale);
+  const transform = capitalCaseTransformFactory(lower, upper);
+  return (
+    prefix +
+    words
+      .map((word, index) => {
+        if (index === 0) return lower(word);
+        return transform(word);
+      })
+      .join("") +
+    suffix
+  );
+}
+
 function lowerFactory(locale: Locale): (input: string) => string {
   return locale === false
     ? (input: string) => input.toLowerCase()
