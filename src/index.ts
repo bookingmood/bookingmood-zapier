@@ -4,6 +4,7 @@ import authentication from "./authentication";
 import resources from "./resources";
 import triggers from "./triggers";
 import { ZapierApp } from "./types/zapier";
+import creates from "./creates";
 
 const { version } = require("../package.json");
 
@@ -22,6 +23,8 @@ const schema: ZapierApp = {
       return request;
     },
   ],
+
+  creates,
 
   resources: resources.reduce(
     (acc, resource) => ({ ...acc, [resource.key]: resource }),

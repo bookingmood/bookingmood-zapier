@@ -519,7 +519,9 @@ export type ZapierBasicCreateActionOperation = {
   /** Optionally reference and extends a resource. Allows Zapier to automatically tie together samples, lists and hooks, greatly improving the UX. EG: if you had another trigger reusing a resource but filtering the results. */
   resource?: ZapierKey | undefined;
   /** How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`. */
-  perform: ZapierRequest | ZapierFunction<() => unknown>;
+  perform:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** A function that parses data from a perform (which uses z.generateCallbackUrl()) and callback request to resume this action. */
   performResume?: ZapierFunction<() => unknown> | undefined;
   /** How will Zapier get a single record? If you find yourself reaching for this - consider resources and their built-in get methods. */
