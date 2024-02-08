@@ -1,28 +1,57 @@
 import { baseUrl } from "./data/constants";
 import { webhookEventDescriptions } from "./data/triggers";
 import { ZapierTrigger } from "./types/zapier";
-import { camelCase, capitalCase, sentenceCase } from "./utils/strings";
+import {
+  camelCase,
+  capitalCase,
+  sentenceCase,
+  singular,
+} from "./utils/strings";
 
 const triggers = new Array<ZapierTrigger>();
 
-for (const event in webhookEventDescriptions)
+for (const event in webhookEventDescriptions) {
+  const [table = "", verb = ""] = event.split(".");
+  const noun = singular(sentenceCase(table));
   triggers.push({
     key: camelCase(event),
-    noun: sentenceCase(event.replace(".", " ")),
+    noun,
     display: {
-      label: capitalCase(event.replace(".", " ")),
+      label: capitalCase(`${noun} ${verb}`),
       description: `Triggers when ${webhookEventDescriptions[
         event as keyof typeof webhookEventDescriptions
       ].toLowerCase()}.`,
     },
     operation: {
+      type: "hook",
+      canPaginate: true,
       perform(z, bundle) {
-        return bundle.cleanedRequest?.content["payload"]["new"];
+        const row = bundle.cleanedRequest?.payload?.new;
+        return row ? [row] : [];
+      },
+      async performList(z, bundle) {
+        const limit = bundle.meta.limit === -1 ? 1000 : bundle.meta.limit;
+
+        const res = await z.request({
+          method: "GET",
+          url: `${baseUrl}/${table}`,
+          params: {
+            limit,
+            offset: bundle.meta.page * limit,
+            order: verb === "created" ? "created_at.desc" : "updated_at.desc",
+            select: "*",
+          },
+        });
+
+        return res.data;
       },
       async performSubscribe(z, bundle) {
         const res = await z.request({
           method: "POST",
-          url: `${baseUrl}/webhooks?select=id,signing_secret`,
+          url: `${baseUrl}/webhooks`,
+          params: {
+            select: "id",
+          },
           body: {
             description: `Zapier webhook for ${event}`,
             endpoint: bundle.targetUrl,
@@ -31,7 +60,7 @@ for (const event in webhookEventDescriptions)
             source: "zapier",
           },
         });
-        return res.data;
+        return res.data[0];
       },
       async performUnsubscribe(z, bundle) {
         const res = await z.request({
@@ -43,5 +72,6 @@ for (const event in webhookEventDescriptions)
       resource: event.split(".")[0],
     },
   });
+}
 
 export default triggers;

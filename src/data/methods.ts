@@ -1,3 +1,5 @@
+import { ZapierField } from "../types/zapier";
+
 export const accessibleMethods: Record<string, Array<string>> = {
   attribute_options: ["get", "post", "patch", "delete"],
   attributes: ["get", "post", "patch", "delete"],
@@ -109,3 +111,38 @@ export const labelColumns: Record<string, string> = {
   widget_views: "id",
   widgets: "title",
 };
+
+export const multiLanguageFields = [
+  "attribute_options.name",
+  "attributes.name",
+  "booking_details.name",
+  "email_templates.body",
+  "email_templates.subject",
+  "google_vr_listings.url",
+  "google_vr_listings.partner_hygiene_link",
+  "line_item_taxes.name",
+  "line_items.name",
+  "occupancy_groups.description",
+  "occupancy_groups.name",
+  "occupancy_groups.name_singular",
+  "product_configurations.name",
+  "products.confirmation_message",
+  "products.cta",
+  "products.description",
+  "products.name",
+  "seasons.name",
+  "service_discounts.name",
+  "services.description",
+  "services.label",
+  "site_listings.slug",
+  "site_nav_items.label",
+  "site_pages.slug",
+  "site_pages.title",
+  "site_pages.description",
+  "site_pages.content",
+  "sites.name",
+  "taxes.label",
+  "widget_listings.url",
+];
+
+export const hiddenFields = ["email_templates.attachments", "products.images"];

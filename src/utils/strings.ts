@@ -199,3 +199,11 @@ function splitPrefixSuffix(
     input.slice(suffixIndex),
   ];
 }
+
+export function singular(word: string) {
+  return word
+    .replace(/xes$/, "x")
+    .replace(/ies$/, "y")
+    .replace(/esses$/, "ess")
+    .replace(/s$/, "");
+}

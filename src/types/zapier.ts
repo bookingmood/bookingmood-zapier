@@ -466,13 +466,19 @@ export type ZapierBasicHookToPollOperation = {
   /** Must be explicitly set to `"hook_to_poll"`. */
   type?: "hook_to_poll" | undefined;
   /** Similar a polling trigger, but checks for new data when a webhook is received, instead of every few minutes */
-  performList: ZapierRequest | ZapierFunction<() => unknown>;
+  performList:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** Does this endpoint support pagination via temporary cursor storage? */
   canPaginate?: boolean | undefined;
   /** Takes a URL and any necessary data from the user and subscribes. */
-  performSubscribe: ZapierRequest | ZapierFunction<() => unknown>;
+  performSubscribe:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** Takes a URL and data from a previous subscribe call and unsubscribes. */
-  performUnsubscribe: ZapierRequest | ZapierFunction<() => unknown>;
+  performUnsubscribe:
+    | ZapierRequest
+    | ZapierFunction<(z: ZObject, bundle: Bundle) => unknown>;
   /** What should the form a user sees and configures look like? */
   inputFields?: ZapierDynamicFields | undefined;
   /** What fields of data will this return? Will use resource outputFields if missing, will also use sample if available. */
