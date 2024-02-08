@@ -201,9 +201,6 @@ function splitPrefixSuffix(
 }
 
 export function singular(word: string) {
-  return word
-    .replace(/xes$/, "x")
-    .replace(/ies$/, "y")
-    .replace(/esses$/, "ess")
-    .replace(/s$/, "");
+  if (word.endsWith("esses")) return word.slice(0, -2);
+  return word.replace(/xes$/, "x").replace(/ies$/, "y").replace(/s$/, "");
 }

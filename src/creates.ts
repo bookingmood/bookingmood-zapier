@@ -38,37 +38,37 @@ const creates: ZapierCreates = {
       resource: "members",
     },
   },
-  "revoke-member": {
-    key: "revoke-member",
-    noun: "Member",
-    display: {
-      label: "Revoke Member",
-      description:
-        "Revoke a member from your organization. The member will no longer have access to your organization. Only works for members with the user role. To revoke an admin or superuser members use the dashboard.",
-    },
-    operation: {
-      inputFields: [
-        {
-          key: "id",
-          label: "Member ID",
-          required: true,
-          type: "string",
-          helpText: "The ID of the member you want to revoke.",
-          dynamic: "members.id",
-        },
-      ],
-      async perform(z, bundle) {
-        const res = await z.request({
-          method: "POST",
-          url: `${baseUrl}/revoke-member`,
-          params: bundle.inputData,
-        });
-        return res.data;
-      },
-      outputFields: [{ key: "status", label: "Status", type: "string" }],
-      sample: { status: "ok" },
-    },
-  },
+  // "revoke-member": {
+  //   key: "revoke-member",
+  //   noun: "Member",
+  //   display: {
+  //     label: "Revoke Member",
+  //     description:
+  //       "Revoke a member from your organization. The member will no longer have access to your organization. Only works for members with the user role. To revoke an admin or superuser members use the dashboard.",
+  //   },
+  //   operation: {
+  //     inputFields: [
+  //       {
+  //         key: "id",
+  //         label: "Member ID",
+  //         required: true,
+  //         type: "string",
+  //         helpText: "The ID of the member you want to revoke.",
+  //         dynamic: "membersList.id",
+  //       },
+  //     ],
+  //     async perform(z, bundle) {
+  //       const res = await z.request({
+  //         method: "POST",
+  //         url: `${baseUrl}/revoke-member`,
+  //         params: bundle.inputData,
+  //       });
+  //       return res.data;
+  //     },
+  //     outputFields: [{ key: "status", label: "Status", type: "string" }],
+  //     sample: { status: "ok" },
+  //   },
+  // },
   "create-product": {
     key: "create-product",
     noun: "Product",
@@ -119,37 +119,37 @@ const creates: ZapierCreates = {
       resource: "products",
     },
   },
-  "delete-product": {
-    key: "delete-product",
-    noun: "Product",
-    display: {
-      label: "Delete Product",
-      description:
-        "Delete a unit from your organization. This will also delete all bookings for this unit. Your subscription will be adjusted automatically. This action cannot be undone.",
-    },
-    operation: {
-      inputFields: [
-        {
-          key: "id",
-          label: "Product ID",
-          required: true,
-          type: "string",
-          helpText: "The ID of the product you want to delete.",
-          dynamic: "products.id.name",
-        },
-      ],
-      async perform(z, bundle) {
-        const res = await z.request({
-          method: "POST",
-          url: `${baseUrl}/delete-product`,
-          params: bundle.inputData,
-        });
-        return res.data;
-      },
-      outputFields: [{ key: "status", label: "Status", type: "string" }],
-      sample: { status: "ok" },
-    },
-  },
+  // "delete-product": {
+  //   key: "delete-product",
+  //   noun: "Product",
+  //   display: {
+  //     label: "Delete Product",
+  //     description:
+  //       "Delete a unit from your organization. This will also delete all bookings for this unit. Your subscription will be adjusted automatically. This action cannot be undone.",
+  //   },
+  //   operation: {
+  //     inputFields: [
+  //       {
+  //         key: "id",
+  //         label: "Product",
+  //         required: true,
+  //         type: "string",
+  //         helpText: "The product you want to delete.",
+  //         dynamic: "productsList.id._label",
+  //       },
+  //     ],
+  //     async perform(z, bundle) {
+  //       const res = await z.request({
+  //         method: "POST",
+  //         url: `${baseUrl}/delete-product`,
+  //         params: bundle.inputData,
+  //       });
+  //       return res.data;
+  //     },
+  //     outputFields: [{ key: "status", label: "Status", type: "string" }],
+  //     sample: { status: "ok" },
+  //   },
+  // },
 };
 
 export default creates;

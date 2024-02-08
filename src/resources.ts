@@ -5,15 +5,19 @@ import { spec } from "./data/api-spec";
 import { baseUrl } from "./data/constants";
 import {
   accessibleMethods,
+  customFields,
   hiddenFields,
-  labelColumns,
+  labelGenerators,
   multiLanguageFields,
 } from "./data/methods";
 import { OpenAPIParameter } from "./types/open-api";
 import { ZapierField, ZapierFunction, ZapierResource } from "./types/zapier";
 import { just } from "./utils/functions";
+import { removeNull } from "./utils/objects";
 import { getPropertyExample } from "./utils/resources";
 import { capitalCase, noCase, sentenceCase, singular } from "./utils/strings";
+
+const INCLUDE_SEARCHES = false;
 
 const specEnums = Object.values(spec.definitions)
   .flatMap((table) => Object.values(table.properties))
@@ -89,18 +93,14 @@ for (const table of Object.keys(spec.definitions)
                 const field: ZapierField = {
                   key: identifier,
                   label: sentenceCase(identifier),
-                  helpText: `${property.description
+                  helpText: property.description
                     ?.replace("Note:", "")
                     .replace("This is a Primary Key.<pk/>", "")
                     .replace(
                       /This is a Foreign Key to `.*?`.<fk table='.*?' column='.*?'\/>/g,
                       ""
                     )
-                    .trim()} (${
-                    enumValue
-                      ? enumValue.map((v) => `"${v}"`).join(" | ")
-                      : property.format
-                  })`,
+                    .trim(),
                 };
 
                 if (enumValue)
@@ -142,9 +142,15 @@ for (const table of Object.keys(spec.definitions)
                   const fkTable = match?.[1];
                   const fkColumn = match?.[2];
 
-                  if (fkTable && fkColumn && labelColumns[fkTable])
-                    field.dynamic = `${fkTable}List.${fkColumn}.${labelColumns[fkTable]}`;
+                  if (fkTable && fkColumn) {
+                    field.label = field.label?.replace(" id", "") ?? "";
+                    field.dynamic = `${fkTable}List.${fkColumn}._label`;
+                  }
                 }
+
+                const definition =
+                  customFields[`${table}.${identifier}`]?.definition;
+                if (definition) return [definition(field)];
 
                 if (hiddenFields.includes(`${table}.${identifier}`)) return [];
 
@@ -160,13 +166,19 @@ for (const table of Object.keys(spec.definitions)
               const body = bundle.inputData;
               for (const [key, value] of Object.entries(body))
                 if (multiLanguageFields.includes(`${table}.${key}`))
-                  body[key] = { default: value };
+                  body[key] = { default: value ?? "" };
+              for (const key in body) {
+                const interpeter = customFields[`${table}.${key}`]?.interpeter;
+                if (interpeter) body[key] = interpeter(body[key]);
+              }
+
+              for (const key in body) if (key.includes(".")) delete body[key];
 
               const res = await z.request({
                 method: "POST",
                 url: `${baseUrl}/${table}`,
                 params: { select: "*" },
-                body,
+                body: removeNull(body),
               });
               return res.data[0];
             },
@@ -189,72 +201,42 @@ for (const table of Object.keys(spec.definitions)
                 url: `${baseUrl}/${table}`,
                 params: { limit, offset: bundle.meta.page * limit },
               });
-              return res.data;
+              return res.data.map((row: Record<string, unknown>) => ({
+                ...row,
+                _label: labelGenerators[table]?.(row) ?? "",
+              }));
             },
           },
         }
       : undefined,
-    search: methods.includes("get")
-      ? {
-          display: {
-            label: `Search ${capitalCase(table).replace(" To ", "-To ")}`,
-            description: `Search ${noCase(table)}`,
-          },
-          operation: {
-            inputFields: (
-              searchParameters
-                ?.filter(
-                  (p) =>
-                    (p.name === "id" || p.name.endsWith("_id")) &&
-                    p.name !== "ac_id"
+    search:
+      INCLUDE_SEARCHES && methods.includes("get")
+        ? {
+            display: {
+              label: `Search ${capitalCase(table).replace(" To ", "-To ")}`,
+              description: `Search ${noCase(table)}`,
+            },
+            operation: {
+              inputFields: (
+                searchParameters
+                  ?.filter(
+                    (p) =>
+                      (p.name === "id" || p.name.endsWith("_id")) &&
+                      p.name !== "ac_id"
+                  )
+                  .sort(
+                    firstBy<OpenAPIParameter>((p) =>
+                      p.name === "id" ? 0 : p.name.endsWith("_id") ? 1 : 2
+                    ).thenBy((p) => p.name)
+                  ) ?? []
+              ).flatMap<
+                | ZapierField
+                | ZapierFunction<(z: ZObject, bundle: Bundle) => ZapierField>
+              >((parameter) => {
+                if (
+                  parameter.name === "id" ||
+                  (parameter.name === "user_id" && table === "user_profiles")
                 )
-                .sort(
-                  firstBy<OpenAPIParameter>((p) =>
-                    p.name === "id" ? 0 : p.name.endsWith("_id") ? 1 : 2
-                  ).thenBy((p) => p.name)
-                ) ?? []
-            ).flatMap<
-              | ZapierField
-              | ZapierFunction<(z: ZObject, bundle: Bundle) => ZapierField>
-            >((parameter) => {
-              if (
-                (parameter.name === "id" ||
-                  (parameter.name === "user_id" &&
-                    table === "user_profiles")) &&
-                labelColumns[table]
-              )
-                return [
-                  {
-                    key: parameter.name,
-                    label: sentenceCase(parameter.name),
-                    helpText: parameter.description,
-                    required: parameter.required,
-                    type: "string",
-                    dynamic: `${table}List.${parameter.name}.${labelColumns[table]}`,
-                  },
-                ];
-
-              if (parameter.name === "organization_id")
-                return [
-                  (z, bundle) => ({
-                    key: "organization_id",
-                    label: "Organization",
-                    required: true,
-                    type: "string",
-                    computed: true,
-                    default: bundle.authData["organization_id"],
-                  }),
-                ];
-
-              if (parameter.name.endsWith("_id")) {
-                const property = model?.properties[parameter.name];
-
-                const fkRegex = /<fk table='(.*?)' column='(.*?)'\/>/g;
-                const match = fkRegex.exec(property?.description ?? "");
-                const fkTable = match?.[1];
-                const fkColumn = match?.[2];
-
-                if (fkTable && fkColumn && labelColumns[fkTable])
                   return [
                     {
                       key: parameter.name,
@@ -262,27 +244,59 @@ for (const table of Object.keys(spec.definitions)
                       helpText: parameter.description,
                       required: parameter.required,
                       type: "string",
-                      dynamic: `${fkTable}List.${fkColumn}.${labelColumns[fkTable]}`,
+                      dynamic: `${table}List.${parameter.name}._label`,
                     },
                   ];
-              }
 
-              return [];
-            }),
-            async perform(z, bundle) {
-              const params: Record<string, unknown> = {};
-              for (const [key, value] of Object.entries(bundle.inputData))
-                params[key] = `eq.${value}`;
+                if (parameter.name === "organization_id")
+                  return [
+                    (z, bundle) => ({
+                      key: "organization_id",
+                      label: "Organization",
+                      required: true,
+                      type: "string",
+                      computed: true,
+                      default: bundle.authData["organization_id"],
+                    }),
+                  ];
 
-              const res = await z.request({
-                url: `${baseUrl}/${table}`,
-                params,
-              });
-              return res.data;
+                if (parameter.name.endsWith("_id")) {
+                  const property = model?.properties[parameter.name];
+
+                  const fkRegex = /<fk table='(.*?)' column='(.*?)'\/>/g;
+                  const match = fkRegex.exec(property?.description ?? "");
+                  const fkTable = match?.[1];
+                  const fkColumn = match?.[2];
+
+                  if (fkTable && fkColumn)
+                    return [
+                      {
+                        key: parameter.name,
+                        label: sentenceCase(parameter.name).replace(" id", ""),
+                        helpText: parameter.description,
+                        required: parameter.required,
+                        type: "string",
+                        dynamic: `${fkTable}List.${fkColumn}._label`,
+                      },
+                    ];
+                }
+
+                return [];
+              }),
+              async perform(z, bundle) {
+                const params: Record<string, unknown> = {};
+                for (const [key, value] of Object.entries(bundle.inputData))
+                  params[key] = `eq.${value}`;
+
+                const res = await z.request({
+                  url: `${baseUrl}/${table}`,
+                  params,
+                });
+                return res.data;
+              },
             },
-          },
-        }
-      : undefined,
+          }
+        : undefined,
     sample: Object.fromEntries(
       Object.entries(model?.properties ?? {})
         .filter(([identifier]) => identifier !== "fts")

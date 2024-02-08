@@ -7,7 +7,7 @@ export const spec: OpenAPISpec = {
     title: "PostgREST API",
     version: "10.2.0 (e07807d)",
   },
-  host: "localhost:3000",
+  host: "0.0.0.0:3000",
   basePath: "/",
   schemes: ["http"],
   consumes: [
@@ -1283,6 +1283,9 @@ export const spec: OpenAPISpec = {
             $ref: "#/parameters/rowFilter.invoices.booking_id",
           },
           {
+            $ref: "#/parameters/rowFilter.invoices.updated_at",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -1359,6 +1362,9 @@ export const spec: OpenAPISpec = {
             $ref: "#/parameters/rowFilter.invoices.booking_id",
           },
           {
+            $ref: "#/parameters/rowFilter.invoices.updated_at",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -1386,6 +1392,9 @@ export const spec: OpenAPISpec = {
           },
           {
             $ref: "#/parameters/rowFilter.invoices.booking_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.invoices.updated_at",
           },
           {
             $ref: "#/parameters/body.invoices",
@@ -6033,6 +6042,181 @@ export const spec: OpenAPISpec = {
         },
       },
     },
+    "/webhook_notifications": {
+      get: {
+        tags: ["webhook_notifications"],
+        summary: "Notifications sent and scheduled per webhook",
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.webhook_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.created_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.updated_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.event_type",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.payload",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.response",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.tries",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/webhook_notifications",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+      },
+      post: {
+        tags: ["webhook_notifications"],
+        summary: "Notifications sent and scheduled per webhook",
+        parameters: [
+          {
+            $ref: "#/parameters/body.webhook_notifications",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+      },
+      delete: {
+        tags: ["webhook_notifications"],
+        summary: "Notifications sent and scheduled per webhook",
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.webhook_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.created_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.updated_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.event_type",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.payload",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.response",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.tries",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+      },
+      patch: {
+        tags: ["webhook_notifications"],
+        summary: "Notifications sent and scheduled per webhook",
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.webhook_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.created_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.updated_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.event_type",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.payload",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.status",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.response",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhook_notifications.tries",
+          },
+          {
+            $ref: "#/parameters/body.webhook_notifications",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+      },
+    },
     "/organization_notes": {
       get: {
         tags: ["organization_notes"],
@@ -6204,6 +6388,9 @@ export const spec: OpenAPISpec = {
             $ref: "#/parameters/rowFilter.calendar_event_tasks.notification_sent_at",
           },
           {
+            $ref: "#/parameters/rowFilter.calendar_event_tasks.updated_at",
+          },
+          {
             $ref: "#/parameters/select",
           },
           {
@@ -6295,6 +6482,9 @@ export const spec: OpenAPISpec = {
             $ref: "#/parameters/rowFilter.calendar_event_tasks.notification_sent_at",
           },
           {
+            $ref: "#/parameters/rowFilter.calendar_event_tasks.updated_at",
+          },
+          {
             $ref: "#/parameters/preferReturn",
           },
         ],
@@ -6337,6 +6527,9 @@ export const spec: OpenAPISpec = {
           },
           {
             $ref: "#/parameters/rowFilter.calendar_event_tasks.notification_sent_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.calendar_event_tasks.updated_at",
           },
           {
             $ref: "#/parameters/body.calendar_event_tasks",
@@ -11856,6 +12049,193 @@ export const spec: OpenAPISpec = {
         },
       },
     },
+    "/webhooks": {
+      get: {
+        tags: ["webhooks"],
+        summary:
+          "Webhooks are a messaging mechanism that allow you to get notified on an endpoint of your choice as soon as certain events happen in Bookingmood.",
+        description:
+          "For more information on the webhook mechanics, see [our documentation](/docs/tips-tricks/webhooks)",
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.webhooks.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.created_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.updated_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.endpoint",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.organization_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.events",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.signing_secret",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.source",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/order",
+          },
+          {
+            $ref: "#/parameters/range",
+          },
+          {
+            $ref: "#/parameters/rangeUnit",
+          },
+          {
+            $ref: "#/parameters/offset",
+          },
+          {
+            $ref: "#/parameters/limit",
+          },
+          {
+            $ref: "#/parameters/preferCount",
+          },
+        ],
+        responses: {
+          "200": {
+            description: "OK",
+            schema: {
+              items: {
+                $ref: "#/definitions/webhooks",
+              },
+              type: "array",
+            },
+          },
+          "206": {
+            description: "Partial Content",
+          },
+        },
+      },
+      post: {
+        tags: ["webhooks"],
+        summary:
+          "Webhooks are a messaging mechanism that allow you to get notified on an endpoint of your choice as soon as certain events happen in Bookingmood.",
+        description:
+          "For more information on the webhook mechanics, see [our documentation](/docs/tips-tricks/webhooks)",
+        parameters: [
+          {
+            $ref: "#/parameters/body.webhooks",
+          },
+          {
+            $ref: "#/parameters/select",
+          },
+          {
+            $ref: "#/parameters/preferPost",
+          },
+        ],
+        responses: {
+          "201": {
+            description: "Created",
+          },
+        },
+      },
+      delete: {
+        tags: ["webhooks"],
+        summary:
+          "Webhooks are a messaging mechanism that allow you to get notified on an endpoint of your choice as soon as certain events happen in Bookingmood.",
+        description:
+          "For more information on the webhook mechanics, see [our documentation](/docs/tips-tricks/webhooks)",
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.webhooks.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.created_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.updated_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.endpoint",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.organization_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.events",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.signing_secret",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.source",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+      },
+      patch: {
+        tags: ["webhooks"],
+        summary:
+          "Webhooks are a messaging mechanism that allow you to get notified on an endpoint of your choice as soon as certain events happen in Bookingmood.",
+        description:
+          "For more information on the webhook mechanics, see [our documentation](/docs/tips-tricks/webhooks)",
+        parameters: [
+          {
+            $ref: "#/parameters/rowFilter.webhooks.id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.created_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.updated_at",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.endpoint",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.description",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.organization_id",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.events",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.signing_secret",
+          },
+          {
+            $ref: "#/parameters/rowFilter.webhooks.source",
+          },
+          {
+            $ref: "#/parameters/body.webhooks",
+          },
+          {
+            $ref: "#/parameters/preferReturn",
+          },
+        ],
+        responses: {
+          "204": {
+            description: "No Content",
+          },
+        },
+      },
+    },
     "/product_occupancies": {
       get: {
         tags: ["product_occupancies"],
@@ -12755,9 +13135,6 @@ export const spec: OpenAPISpec = {
             $ref: "#/parameters/rowFilter.site_pages.site_id",
           },
           {
-            $ref: "#/parameters/rowFilter.site_pages.parent_id",
-          },
-          {
             $ref: "#/parameters/rowFilter.site_pages.status",
           },
           {
@@ -12846,9 +13223,6 @@ export const spec: OpenAPISpec = {
             $ref: "#/parameters/rowFilter.site_pages.site_id",
           },
           {
-            $ref: "#/parameters/rowFilter.site_pages.parent_id",
-          },
-          {
             $ref: "#/parameters/rowFilter.site_pages.status",
           },
           {
@@ -12888,9 +13262,6 @@ export const spec: OpenAPISpec = {
           },
           {
             $ref: "#/parameters/rowFilter.site_pages.site_id",
-          },
-          {
-            $ref: "#/parameters/rowFilter.site_pages.parent_id",
           },
           {
             $ref: "#/parameters/rowFilter.site_pages.status",
@@ -15193,12 +15564,12 @@ export const spec: OpenAPISpec = {
           type: "string",
         },
         email: {
-          description: "Email address",
+          description: "The email address to send the reply to",
           format: "text",
           type: "string",
         },
         name: {
-          description: "Name",
+          description: "The display name of email address to send the reply to",
           format: "text",
           type: "string",
         },
@@ -15368,7 +15739,13 @@ export const spec: OpenAPISpec = {
     },
     invoices: {
       description: "Invoices for bookings",
-      required: ["id", "created_at", "organization_id", "reference"],
+      required: [
+        "id",
+        "created_at",
+        "organization_id",
+        "reference",
+        "updated_at",
+      ],
       properties: {
         id: {
           default: "extensions.uuid_generate_v4()",
@@ -15398,6 +15775,12 @@ export const spec: OpenAPISpec = {
           description:
             "Identifier of the related booking\n\nNote:\nThis is a Foreign Key to `bookings.id`.<fk table='bookings' column='id'/>",
           format: "uuid",
+          type: "string",
+        },
+        updated_at: {
+          default: "now()",
+          description: "Last modification timestamp",
+          format: "timestamp with time zone",
           type: "string",
         },
       },
@@ -17014,7 +17397,7 @@ export const spec: OpenAPISpec = {
         },
         assignee_id: {
           description:
-            "Note:\nThis is a Foreign Key to `members.id`.<fk table='members' column='id'/>",
+            "Identifier of the default assignee for this task\n\nNote:\nThis is a Foreign Key to `members.id`.<fk table='members' column='id'/>",
           format: "uuid",
           type: "string",
         },
@@ -17293,6 +17676,72 @@ export const spec: OpenAPISpec = {
       },
       type: "object",
     },
+    webhook_notifications: {
+      description: "Notifications sent and scheduled per webhook",
+      required: [
+        "id",
+        "webhook_id",
+        "created_at",
+        "updated_at",
+        "event_type",
+        "payload",
+        "status",
+        "tries",
+      ],
+      properties: {
+        id: {
+          default: "extensions.uuid_generate_v4()",
+          description:
+            "Unique identifier\n\nNote:\nThis is a Primary Key.<pk/>",
+          format: "uuid",
+          type: "string",
+        },
+        webhook_id: {
+          description:
+            "Identifier of the webhook this notification is related to\n\nNote:\nThis is a Foreign Key to `webhooks.id`.<fk table='webhooks' column='id'/>",
+          format: "uuid",
+          type: "string",
+        },
+        created_at: {
+          default: "now()",
+          description: "Creation timestamp",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updated_at: {
+          default: "now()",
+          description: "Last modification timestamp",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        event_type: {
+          description: "Event this notification is for",
+          format: "text",
+          type: "string",
+        },
+        payload: {
+          description: "JSON payload that is sent along with this notification",
+          format: "jsonb",
+        },
+        status: {
+          default: "pending",
+          description:
+            "Notification status. Either `pending`, `sent` or `error`",
+          format: "text",
+          type: "string",
+        },
+        response: {
+          format: "text",
+          type: "string",
+        },
+        tries: {
+          default: 0,
+          format: "integer",
+          type: "integer",
+        },
+      },
+      type: "object",
+    },
     organization_notes: {
       required: ["id", "organization_id", "note", "created_at", "updated_at"],
       properties: {
@@ -17338,6 +17787,7 @@ export const spec: OpenAPISpec = {
         "label",
         "due_at",
         "schedule",
+        "updated_at",
       ],
       properties: {
         id: {
@@ -17395,6 +17845,12 @@ export const spec: OpenAPISpec = {
         },
         notification_sent_at: {
           description: "Timestamp of the last notification sent",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updated_at: {
+          default: "now()",
+          description: "Last modification timestamp",
           format: "timestamp with time zone",
           type: "string",
         },
@@ -17512,13 +17968,14 @@ export const spec: OpenAPISpec = {
           type: "string",
         },
         type: {
-          description: "Type of the service, either `service` or `deposit`",
+          description: "Type of the service",
           format: "text",
           type: "string",
         },
         order: {
+          default: 0,
           description:
-            "Order of the service as displayed on widgets and websites",
+            "Identifier of the parent service. Only applicable for services with type 'multiple-choice-option'.",
           format: "smallint",
           type: "integer",
         },
@@ -19529,6 +19986,82 @@ export const spec: OpenAPISpec = {
       },
       type: "object",
     },
+    webhooks: {
+      description:
+        "Webhooks are a messaging mechanism that allow you to get notified on an endpoint of your choice as soon as certain events happen in Bookingmood.\n\nFor more information on the webhook mechanics, see [our documentation](/docs/tips-tricks/webhooks)",
+      required: [
+        "id",
+        "created_at",
+        "updated_at",
+        "endpoint",
+        "description",
+        "organization_id",
+        "events",
+        "signing_secret",
+        "source",
+      ],
+      properties: {
+        id: {
+          default: "extensions.uuid_generate_v4()",
+          description:
+            "Unique identifier\n\nNote:\nThis is a Primary Key.<pk/>",
+          format: "uuid",
+          type: "string",
+        },
+        created_at: {
+          default: "now()",
+          description: "Creation timestamp",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        updated_at: {
+          default: "now()",
+          description: "Last modification timestamp",
+          format: "timestamp with time zone",
+          type: "string",
+        },
+        endpoint: {
+          description: "URL to which notifications should be sent",
+          format: "text",
+          type: "string",
+        },
+        description: {
+          default: "",
+          description: "An optional description of the webhook",
+          format: "text",
+          type: "string",
+        },
+        organization_id: {
+          description:
+            "Identifier of the organization this webhook is defined in\n\nNote:\nThis is a Foreign Key to `organizations.id`.<fk table='organizations' column='id'/>",
+          format: "uuid",
+          type: "string",
+        },
+        events: {
+          description:
+            "Events to which the webhook is subscribed. For possible values, see [a complete list](/docs/tips-tricks/webhooks#event-types)",
+          format: "text[]",
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+        signing_secret: {
+          default: "md5((random())::text)",
+          description:
+            "String used to sign each notification send to the webhook. Used to verify the validity of the webhook notifications.",
+          format: "text",
+          type: "string",
+        },
+        source: {
+          description:
+            "From where the webhook is registered. Can be from the admin, via the API, or via an external tool such as Zapier.",
+          format: "text",
+          type: "string",
+        },
+      },
+      type: "object",
+    },
     product_occupancies: {
       description: "Occupancy limits per unit per occupancy group",
       required: [
@@ -19958,12 +20491,6 @@ export const spec: OpenAPISpec = {
         site_id: {
           description:
             "Identifier of the site this page is defined in\n\nNote:\nThis is a Foreign Key to `sites.id`.<fk table='sites' column='id'/>",
-          format: "uuid",
-          type: "string",
-        },
-        parent_id: {
-          description:
-            "Identifier of the parent page\n\nNote:\nThis is a Foreign Key to `site_pages.id`.<fk table='site_pages' column='id'/>",
           format: "uuid",
           type: "string",
         },
@@ -21376,7 +21903,7 @@ export const spec: OpenAPISpec = {
     },
     "rowFilter.reply_to_addresses.email": {
       name: "email",
-      description: "Email address",
+      description: "The email address to send the reply to",
       required: false,
       format: "text",
       in: "query",
@@ -21384,7 +21911,7 @@ export const spec: OpenAPISpec = {
     },
     "rowFilter.reply_to_addresses.name": {
       name: "name",
-      description: "Name",
+      description: "The display name of email address to send the reply to",
       required: false,
       format: "text",
       in: "query",
@@ -21644,6 +22171,14 @@ export const spec: OpenAPISpec = {
       description: "Identifier of the related booking",
       required: false,
       format: "uuid",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.invoices.updated_at": {
+      name: "updated_at",
+      description: "Last modification timestamp",
+      required: false,
+      format: "timestamp with time zone",
       in: "query",
       type: "string",
     },
@@ -23829,6 +24364,7 @@ export const spec: OpenAPISpec = {
     },
     "rowFilter.product_tasks.assignee_id": {
       name: "assignee_id",
+      description: "Identifier of the default assignee for this task",
       required: false,
       format: "uuid",
       in: "query",
@@ -24244,6 +24780,85 @@ export const spec: OpenAPISpec = {
       in: "query",
       type: "string",
     },
+    "body.webhook_notifications": {
+      name: "webhook_notifications",
+      description: "webhook_notifications",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/webhook_notifications",
+      },
+    },
+    "rowFilter.webhook_notifications.id": {
+      name: "id",
+      description: "Unique identifier",
+      required: false,
+      format: "uuid",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.webhook_id": {
+      name: "webhook_id",
+      description: "Identifier of the webhook this notification is related to",
+      required: false,
+      format: "uuid",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.created_at": {
+      name: "created_at",
+      description: "Creation timestamp",
+      required: false,
+      format: "timestamp with time zone",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.updated_at": {
+      name: "updated_at",
+      description: "Last modification timestamp",
+      required: false,
+      format: "timestamp with time zone",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.event_type": {
+      name: "event_type",
+      description: "Event this notification is for",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.payload": {
+      name: "payload",
+      description: "JSON payload that is sent along with this notification",
+      required: false,
+      format: "jsonb",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.status": {
+      name: "status",
+      description: "Notification status. Either `pending`, `sent` or `error`",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.response": {
+      name: "response",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhook_notifications.tries": {
+      name: "tries",
+      required: false,
+      format: "integer",
+      in: "query",
+      type: "string",
+    },
     "body.organization_notes": {
       name: "organization_notes",
       description: "organization_notes",
@@ -24375,6 +24990,14 @@ export const spec: OpenAPISpec = {
     "rowFilter.calendar_event_tasks.notification_sent_at": {
       name: "notification_sent_at",
       description: "Timestamp of the last notification sent",
+      required: false,
+      format: "timestamp with time zone",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.calendar_event_tasks.updated_at": {
+      name: "updated_at",
+      description: "Last modification timestamp",
       required: false,
       format: "timestamp with time zone",
       in: "query",
@@ -24526,7 +25149,7 @@ export const spec: OpenAPISpec = {
     },
     "rowFilter.services.type": {
       name: "type",
-      description: "Type of the service, either `service` or `deposit`",
+      description: "Type of the service",
       required: false,
       format: "text",
       in: "query",
@@ -24534,7 +25157,8 @@ export const spec: OpenAPISpec = {
     },
     "rowFilter.services.order": {
       name: "order",
-      description: "Order of the service as displayed on widgets and websites",
+      description:
+        "Identifier of the parent service. Only applicable for services with type 'multiple-choice-option'.",
       required: false,
       format: "smallint",
       in: "query",
@@ -27135,6 +27759,90 @@ export const spec: OpenAPISpec = {
       in: "query",
       type: "string",
     },
+    "body.webhooks": {
+      name: "webhooks",
+      description: "webhooks",
+      required: false,
+      in: "body",
+      schema: {
+        $ref: "#/definitions/webhooks",
+      },
+    },
+    "rowFilter.webhooks.id": {
+      name: "id",
+      description: "Unique identifier",
+      required: false,
+      format: "uuid",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.created_at": {
+      name: "created_at",
+      description: "Creation timestamp",
+      required: false,
+      format: "timestamp with time zone",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.updated_at": {
+      name: "updated_at",
+      description: "Last modification timestamp",
+      required: false,
+      format: "timestamp with time zone",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.endpoint": {
+      name: "endpoint",
+      description: "URL to which notifications should be sent",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.description": {
+      name: "description",
+      description: "An optional description of the webhook",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.organization_id": {
+      name: "organization_id",
+      description: "Identifier of the organization this webhook is defined in",
+      required: false,
+      format: "uuid",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.events": {
+      name: "events",
+      description:
+        "Events to which the webhook is subscribed. For possible values, see [a complete list](/docs/tips-tricks/webhooks#event-types)",
+      required: false,
+      format: "text[]",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.signing_secret": {
+      name: "signing_secret",
+      description:
+        "String used to sign each notification send to the webhook. Used to verify the validity of the webhook notifications.",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
+    "rowFilter.webhooks.source": {
+      name: "source",
+      description:
+        "From where the webhook is registered. Can be from the admin, via the API, or via an external tool such as Zapier.",
+      required: false,
+      format: "text",
+      in: "query",
+      type: "string",
+    },
     "body.product_occupancies": {
       name: "product_occupancies",
       description: "product_occupancies",
@@ -27717,14 +28425,6 @@ export const spec: OpenAPISpec = {
     "rowFilter.site_pages.site_id": {
       name: "site_id",
       description: "Identifier of the site this page is defined in",
-      required: false,
-      format: "uuid",
-      in: "query",
-      type: "string",
-    },
-    "rowFilter.site_pages.parent_id": {
-      name: "parent_id",
-      description: "Identifier of the parent page",
       required: false,
       format: "uuid",
       in: "query",

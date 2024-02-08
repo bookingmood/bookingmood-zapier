@@ -1,10 +1,10 @@
 import { version as platformVersion } from "zapier-platform-core";
 
 import authentication from "./authentication";
+import creates from "./creates";
 import resources from "./resources";
 import triggers from "./triggers";
 import { ZapierApp } from "./types/zapier";
-import creates from "./creates";
 
 const { version } = require("../package.json");
 
