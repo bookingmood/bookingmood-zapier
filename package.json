@@ -1,6 +1,6 @@
 {
   "name": "bookingmood-zapier",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Bookingmood Zapier integration specification",
   "main": "index.js",
   "scripts": {

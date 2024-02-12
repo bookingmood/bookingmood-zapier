@@ -7,12 +7,16 @@ Find the latest zapier docs at: https://github.com/zapier/zapier-platform/blob/m
 ## Development
 
 ```bash
-# Watch and compile as you edit code
 yarn watch
+# In other terminal
+yarn test-watch
+```
 
-# There's also a non-watch compile command
-yarn build
+## Publishing
 
-# To push to Zapier, make sure you compile first
+```bash
 yarn build && zapier push
+# Test within zapier
+zapier promote [new_version]
+zapier migrate [old_version] [new_version]
 ```

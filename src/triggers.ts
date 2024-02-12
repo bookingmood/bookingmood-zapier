@@ -1,4 +1,5 @@
 import { baseUrl } from "./data/constants";
+import { selects } from "./data/methods";
 import { webhookEventDescriptions } from "./data/triggers";
 import { ZapierTrigger } from "./types/zapier";
 import {
@@ -39,7 +40,7 @@ for (const event in webhookEventDescriptions) {
             limit,
             offset: bundle.meta.page * limit,
             order: verb === "created" ? "created_at.desc" : "updated_at.desc",
-            select: "*",
+            select: selects[table] ?? "*",
           },
         });
 

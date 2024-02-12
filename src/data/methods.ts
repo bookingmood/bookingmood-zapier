@@ -56,6 +56,10 @@ export const accessibleMethods: Record<string, Array<string>> = {
   widgets: ["get", "post", "patch", "delete"],
 };
 
+export const selects: Record<string, string> = {
+  members: "*,user_profile:user_profiles!inner(*)",
+};
+
 export const labelGenerators: Record<
   string,
   (row: Record<string, any>) => unknown
@@ -82,7 +86,7 @@ export const labelGenerators: Record<
   invoices: (row) => row["reference"],
   line_item_taxes: (row) => row["name"]?.["default"],
   line_items: (row) => row["name"]?.["default"],
-  members: (row) => row["id"],
+  members: (row) => row["user_profile"]["name"] || row["user_profile"]["email"],
   occupancy_group_dependencies: (row) => row["id"],
   occupancy_groups: (row) => row["name"]?.["default"],
   payments: (row) => row["reference"],

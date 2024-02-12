@@ -9,6 +9,7 @@ import {
   hiddenFields,
   labelGenerators,
   multiLanguageFields,
+  selects,
 } from "./data/methods";
 import { OpenAPIParameter } from "./types/open-api";
 import { ZapierField, ZapierFunction, ZapierResource } from "./types/zapier";
@@ -177,7 +178,7 @@ for (const table of Object.keys(spec.definitions)
               const res = await z.request({
                 method: "POST",
                 url: `${baseUrl}/${table}`,
-                params: { select: "*" },
+                params: { select: selects[table] ?? "*" },
                 body: removeNull(body),
               });
               return res.data[0];
@@ -199,7 +200,11 @@ for (const table of Object.keys(spec.definitions)
               const limit = bundle.meta.limit === -1 ? 1000 : bundle.meta.limit;
               const res = await z.request({
                 url: `${baseUrl}/${table}`,
-                params: { limit, offset: bundle.meta.page * limit },
+                params: {
+                  limit,
+                  offset: bundle.meta.page * limit,
+                  select: selects[table] ?? "*",
+                },
               });
               return res.data.map((row: Record<string, unknown>) => ({
                 ...row,
