@@ -9,3 +9,11 @@ Update trigger/members: Include user_profile in response.
 ## 1.0.4
 
 Update trigger/members: Fix user_profile selector.
+
+## 1.0.5
+
+Update trigger/members: Add user_profile to sample data.
+
+## 1.0.6
+
+Update trigger/members: Fix user_profile sample data.

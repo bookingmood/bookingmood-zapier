@@ -5,6 +5,7 @@ import { spec } from "./data/api-spec";
 import { baseUrl } from "./data/constants";
 import {
   accessibleMethods,
+  additionalProperties,
   customFields,
   hiddenFields,
   labelGenerators,
@@ -324,6 +325,7 @@ for (const table of Object.keys(spec.definitions)
           identifier,
           getPropertyExample(property),
         ])
+        .concat(additionalProperties[table] ?? [])
     ),
   });
 }

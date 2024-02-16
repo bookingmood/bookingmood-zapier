@@ -1,4 +1,7 @@
+import { firstBy } from "thenby";
 import { ZapierField } from "../types/zapier";
+import { spec } from "./api-spec";
+import { getPropertyExample } from "../utils/resources";
 
 export const accessibleMethods: Record<string, Array<string>> = {
   attribute_options: ["get", "post", "patch", "delete"],
@@ -497,4 +500,35 @@ export const customFields: Record<
       return { restrictions: [], type: "relative", value };
     },
   },
+};
+
+export const additionalProperties: Record<string, Array<[string, unknown]>> = {
+  members: [
+    [
+      "user_profile",
+      Object.fromEntries(
+        Object.entries(spec.definitions["user_profiles"]?.properties ?? {})
+          .filter(([identifier]) => identifier !== "fts")
+          .sort(
+            firstBy(([identifier]) =>
+              identifier === "id"
+                ? 0
+                : identifier.endsWith("_id")
+                ? 1
+                : identifier === "created_at"
+                ? 2
+                : identifier === "updated_at"
+                ? 3
+                : identifier === "deleted_at"
+                ? 4
+                : 5
+            ).thenBy(([identifier]) => identifier)
+          )
+          .map(([identifier, property]) => [
+            identifier,
+            getPropertyExample(property),
+          ])
+      ),
+    ],
+  ],
 };
