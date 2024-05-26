@@ -15,6 +15,7 @@ yarn test-watch
 ## Publishing
 
 ```bash
+# Update version in package.json
 yarn build && zapier push
 # Test within zapier
 zapier promote [new_version]

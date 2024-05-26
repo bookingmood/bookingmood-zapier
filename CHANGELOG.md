@@ -17,3 +17,7 @@ Update trigger/members: Add user_profile to sample data.
 ## 1.0.6
 
 Update trigger/members: Fix user_profile sample data.
+
+## 1.0.7
+
+Fix #2: Add field validation during authentication.
