@@ -1,0 +1,2 @@
+# The Zapier CLI copies node_modules to package the integration, which needs a flat layout
+nodeLinker: hoisted

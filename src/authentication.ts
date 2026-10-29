@@ -1,50 +1,35 @@
-import { baseUrl } from "./data/constants";
-import { ZapierAuthentication } from "./types/zapier";
+import type { Authentication, Bundle, ZObject } from "zapier-platform-core";
 
-const authentication: ZapierAuthentication = {
+import { organizationFetch } from "./api";
+
+// API keys belong to one organization, so the key is all Zapier needs.
+// Connections made before 2.0 also stored an organization name and ID, which are no longer used.
+export const authentication: Authentication = {
   type: "custom",
-  connectionLabel: (z, bundle) => bundle.authData["organization_name"],
   fields: [
-    {
-      key: "organization_name",
-      label: "Organization name",
-      helpText:
-        "Name of your organization in [Bookingmood](https://www.bookingmood.com/admin)",
-      required: false,
-      type: "string",
-    },
-    {
-      key: "organization_id",
-      label: "Organization ID",
-      helpText:
-        "ID of your organization in [Bookingmood](https://www.bookingmood.com/admin). Visible in the url as /admin/organizations/{{organization_id}}/...",
-      required: true,
-      type: "string",
-    },
     {
       key: "api_key",
       label: "API key",
-      helpText:
-        "API keys can be created and copied from [Bookingmood](https://www.bookingmood.com/admin) -> Settings -> API keys",
       required: true,
       type: "password",
+      helpText:
+        "Create an API key in [Bookingmood](https://www.bookingmood.com/admin) under Settings → API keys.",
     },
   ],
-  test: async (z, bundle) => {
-    const uuidRegex =
-      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
-    const organization_id = bundle.authData["organization_id"];
-    const api_key = bundle.authData["api_key"];
-    if (!organization_id || !uuidRegex.test(organization_id))
+  test: async (z: ZObject, bundle: Bundle) => {
+    const key = String(bundle.authData["api_key"] ?? "").trim();
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        key,
+      )
+    )
       throw new z.errors.Error(
-        "Organization ID is invalid",
-        "InvalidData",
-        400
+        "The API key is invalid. Copy it from Settings → API keys in Bookingmood.",
+        "invalid_api_key",
+        400,
       );
-    if (!api_key || !uuidRegex.test(api_key))
-      throw new z.errors.Error("API key is invalid", "InvalidData", 400);
-    return await z.request({ url: `${baseUrl}/products` });
+    const organization = await organizationFetch(z);
+    return { id: organization.id, name: organization.name?.["default"] ?? "" };
   },
+  connectionLabel: "{{name}}",
 };
-
-export default authentication;
