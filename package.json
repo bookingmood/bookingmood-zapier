@@ -19,7 +19,7 @@
     "zapier-platform-core": "19.2.1"
   },
   "devDependencies": {
-    "@types/node": "22.19.1",
+    "@types/node": "26.6.5",
     "nock": "15.0.1",
     "prettier": "3.6.2",
     "typescript": "7.0.2",
