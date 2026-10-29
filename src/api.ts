@@ -24,8 +24,7 @@ export const handleErrors = (response: HttpResponse, z: ZObject) => {
     );
   if (response.status >= 400) {
     const json = response.json as
-      | { message?: string; hint?: string }
-      | undefined;
+      { message?: string; hint?: string } | undefined;
     const message =
       [json?.message, json?.hint].filter(Boolean).join(". ") ||
       response.content ||

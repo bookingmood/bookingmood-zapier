@@ -1,0 +1,2 @@
+# Written by scripts/sync-spec.mts, which pnpm check-spec compares byte for byte
+src/generated/
