@@ -1,0 +1,16 @@
+# Zapier retires old platform and Node versions, so keep zapier-platform-* current
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 14
+    groups:
+      zapier:
+        patterns: ["zapier-platform-*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

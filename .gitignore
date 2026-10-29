@@ -1,30 +1,6 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Dependency directories
 node_modules/
-
-# environment variables file
-.env
-.env.local
-
-# Build files
 lib/
 build/
-
-# Zapier RC file
-.zapierapprc
-
-# Yarn 2
-.yarn/
-
+.env
+.env.local
+*.log

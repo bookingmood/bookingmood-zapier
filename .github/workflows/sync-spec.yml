@@ -1,0 +1,54 @@
+# Opens a pull request when the Bookingmood API spec changed, with the
+# regenerated types and surface.json, so the change can be reviewed like any
+# other. Typecheck or test failures in that pull request point at the config
+# that needs updating.
+name: Sync API spec
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-spec
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+          node-version: 22
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm sync-spec
+
+      # Refreshes surface.json; failures are left for the pull request to show
+      - run: pnpm test -u || true
+
+      - name: Open a pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet; then
+            echo "The spec is up to date"
+            exit 0
+          fi
+          branch=sync-spec/$(date +%Y-%m-%d)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git commit -am "Sync the Bookingmood API spec"
+          git push --force origin "$branch"
+          gh pr create --fill --head "$branch" --body "The Bookingmood API spec changed. Review the diff of \`surface.json\` for what changes in the Zap editor, and update \`src/config.ts\` where needed." || true

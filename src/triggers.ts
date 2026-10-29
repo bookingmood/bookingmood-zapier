@@ -1,78 +1,110 @@
-import { baseUrl } from "./data/constants";
-import { selects } from "./data/methods";
-import { webhookEventDescriptions } from "./data/triggers";
-import { ZapierTrigger } from "./types/zapier";
+import type { Bundle, Trigger, ZObject } from "zapier-platform-core";
+
+import { baseUrl, organizationFetch, rows, type Row } from "./api";
+import { eventFilters, tableConfigs } from "./config";
 import {
-  camelCase,
-  capitalCase,
-  sentenceCase,
-  singular,
-} from "./utils/strings";
+  hasColumn,
+  webhookEventDescription,
+  webhookEvents,
+  type Table,
+  type WebhookEvent,
+} from "./spec";
+import { camelCase, titleCase } from "./strings";
+import { noun, order, sample, select, withLabel } from "./tables";
 
-const triggers = new Array<ZapierTrigger>();
+const label = (event: WebhookEvent) => {
+  const [table, verb = ""] = event.split(".") as [Table, string];
+  if (verb === "created") return `New ${noun(table)}`;
+  if (verb === "updated") return `Updated ${noun(table)}`;
+  return `${noun(table)} ${titleCase(verb)}`;
+};
 
-for (const event in webhookEventDescriptions) {
-  const [table = "", verb = ""] = event.split(".");
-  const noun = singular(sentenceCase(table));
-  triggers.push({
+// "A booking was created" -> "Triggers when a booking is created."
+const description = (event: WebhookEvent) =>
+  `Triggers when ${webhookEventDescription(event)
+    .replace(/^A(n?) /, "a$1 ")
+    .replace(" was ", " is ")}.`;
+
+const trigger = (event: WebhookEvent): Trigger => {
+  const [table] = event.split(".") as [Table];
+  const filter = eventFilters[event];
+  const listOrder =
+    filter?.order ??
+    (event.endsWith(".updated") && hasColumn(table, "updated_at")
+      ? "updated_at.desc"
+      : order(table));
+
+  return {
     key: camelCase(event),
-    noun,
+    noun: noun(table),
     display: {
-      label: capitalCase(`${noun} ${verb}`),
-      description: `Triggers when ${webhookEventDescriptions[
-        event as keyof typeof webhookEventDescriptions
-      ].toLowerCase()}.`,
+      label: label(event),
+      description: description(event),
     },
     operation: {
       type: "hook",
-      canPaginate: true,
-      perform(z, bundle) {
-        const row = bundle.cleanedRequest?.payload?.new;
-        return row ? [row] : [];
+      resource: table,
+      // Notifications are `{ id, event_type, date, payload: { old, new } }`
+      perform: async (z: ZObject, bundle: Bundle) => {
+        const row = (
+          bundle.cleanedRequest as { payload?: { new?: Row } } | undefined
+        )?.payload?.new;
+        if (!row) return [];
+        // Embed the same related rows as the sample data
+        if (tableConfigs[table]?.select && row["id"]) {
+          const response = await z.request({
+            url: `${baseUrl}/${table}`,
+            params: { id: `eq.${row["id"]}`, select: select(table) },
+          });
+          return rows(response).map(withLabel(table));
+        }
+        return [withLabel(table)(row)];
       },
-      async performList(z, bundle) {
-        const limit = bundle.meta.limit === -1 ? 1000 : bundle.meta.limit;
-
-        const res = await z.request({
-          method: "GET",
+      performList: async (z: ZObject, bundle: Bundle) => {
+        const limit = bundle.meta.limit > 0 ? bundle.meta.limit : 3;
+        const response = await z.request({
           url: `${baseUrl}/${table}`,
           params: {
             limit,
-            offset: bundle.meta.page * limit,
-            order: verb === "created" ? "created_at.desc" : "updated_at.desc",
-            select: selects[table] ?? "*",
+            select: select(table),
+            ...filter?.filter,
+            ...(listOrder ? { order: listOrder } : {}),
           },
         });
-
-        return res.data;
+        return rows(response).map(withLabel(table));
       },
-      async performSubscribe(z, bundle) {
-        const res = await z.request({
+      performSubscribe: async (z: ZObject, bundle: Bundle) => {
+        const organization = await organizationFetch(z);
+        const response = await z.request({
           method: "POST",
           url: `${baseUrl}/webhooks`,
-          params: {
-            select: "id",
-          },
+          params: { select: "id" },
           body: {
-            description: `Zapier webhook for ${event}`,
+            description: `Zapier: ${label(event)}`,
             endpoint: bundle.targetUrl,
             events: [event],
-            organization_id: bundle.authData["organization_id"],
+            organization_id: organization.id,
             source: "zapier",
           },
         });
-        return res.data[0];
+        return rows(response)[0];
       },
-      async performUnsubscribe(z, bundle) {
-        const res = await z.request({
+      performUnsubscribe: async (z: ZObject, bundle: Bundle) => {
+        const { id } = (bundle.subscribeData ?? {}) as { id?: string };
+        if (!id) return {};
+        await z.request({
           method: "DELETE",
-          url: `${baseUrl}/webhooks?id=eq.${bundle.subscribeData?.id}`,
+          url: `${baseUrl}/webhooks`,
+          params: { id: `eq.${id}` },
         });
-        return res.data;
+        return { id };
       },
-      resource: event.split(".")[0],
+      sample: sample(table),
     },
-  });
-}
+  };
+};
 
-export default triggers;
+export const triggers = (): Record<string, Trigger> =>
+  Object.fromEntries(
+    webhookEvents.map((event) => [camelCase(event), trigger(event)]),
+  );

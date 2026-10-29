@@ -1,0 +1,387 @@
+{
+  "authentication": [
+    "api_key"
+  ],
+  "triggers": {
+    "api_requestsList": "hidden",
+    "attribute_optionsList": "hidden",
+    "attributesList": "hidden",
+    "booking_detailsList": "hidden",
+    "booking_updatesList": "hidden",
+    "bookingsCreated": {
+      "label": "New Booking",
+      "description": "Triggers when a booking is created.",
+      "inputFields": []
+    },
+    "bookingsList": "hidden",
+    "bookingsUpdated": {
+      "label": "Updated Booking",
+      "description": "Triggers when a booking is updated.",
+      "inputFields": []
+    },
+    "calendar_event_notesList": "hidden",
+    "calendar_event_updatesList": "hidden",
+    "calendar_eventsList": "hidden",
+    "calendarEventsCancelled": {
+      "label": "Calendar Event Cancelled",
+      "description": "Triggers when a calendar event is cancelled.",
+      "inputFields": []
+    },
+    "calendarEventsConfirmed": {
+      "label": "Calendar Event Confirmed",
+      "description": "Triggers when a calendar event is confirmed.",
+      "inputFields": []
+    },
+    "calendarEventsCreated": {
+      "label": "New Calendar Event",
+      "description": "Triggers when a calendar event is created.",
+      "inputFields": []
+    },
+    "calendarEventsUpdated": {
+      "label": "Updated Calendar Event",
+      "description": "Triggers when a calendar event is updated.",
+      "inputFields": []
+    },
+    "capacitiesList": "hidden",
+    "capacity_group_dependenciesList": "hidden",
+    "capacity_groupsList": "hidden",
+    "contact_bookingsList": "hidden",
+    "contactsCreated": {
+      "label": "New Contact",
+      "description": "Triggers when a contact is created.",
+      "inputFields": []
+    },
+    "contactsList": "hidden",
+    "contactsUpdated": {
+      "label": "Updated Contact",
+      "description": "Triggers when a contact is updated.",
+      "inputFields": []
+    },
+    "coupon_productsList": "hidden",
+    "coupon_servicesList": "hidden",
+    "coupon_usesList": "hidden",
+    "couponsList": "hidden",
+    "external_calendarsList": "hidden",
+    "invoicesCreated": {
+      "label": "New Invoice",
+      "description": "Triggers when an invoice is created.",
+      "inputFields": []
+    },
+    "invoicesList": "hidden",
+    "invoicesUpdated": {
+      "label": "Updated Invoice",
+      "description": "Triggers when an invoice is updated.",
+      "inputFields": []
+    },
+    "line_item_taxesList": "hidden",
+    "line_itemsList": "hidden",
+    "membersCreated": {
+      "label": "New Member",
+      "description": "Triggers when a member is created.",
+      "inputFields": []
+    },
+    "membersList": "hidden",
+    "membersUpdated": {
+      "label": "Updated Member",
+      "description": "Triggers when a member is updated.",
+      "inputFields": []
+    },
+    "message_eventsList": "hidden",
+    "message_templatesList": "hidden",
+    "messagesList": "hidden",
+    "organization_calendar_logsList": "hidden",
+    "organizationsList": "hidden",
+    "paddle_plansList": "hidden",
+    "paddle_subscriptionsList": "hidden",
+    "paymentsCreated": {
+      "label": "New Payment",
+      "description": "Triggers when a payment is created.",
+      "inputFields": []
+    },
+    "paymentsList": "hidden",
+    "paymentsPaid": {
+      "label": "Payment Paid",
+      "description": "Triggers when a payment is paid.",
+      "inputFields": []
+    },
+    "paymentsUpdated": {
+      "label": "Updated Payment",
+      "description": "Triggers when a payment is updated.",
+      "inputFields": []
+    },
+    "permissionsList": "hidden",
+    "price_calendar_entriesList": "hidden",
+    "pricelabs_pricingList": "hidden",
+    "pricing_widgetsList": "hidden",
+    "product_attribute_optionsList": "hidden",
+    "product_calendar_logsList": "hidden",
+    "product_message_templatesList": "hidden",
+    "product_reply_to_addressesList": "hidden",
+    "product_servicesList": "hidden",
+    "productsCreated": {
+      "label": "New Unit",
+      "description": "Triggers when a product is created.",
+      "inputFields": []
+    },
+    "productsList": "hidden",
+    "productsUpdated": {
+      "label": "Updated Unit",
+      "description": "Triggers when a product is updated.",
+      "inputFields": []
+    },
+    "refundsList": "hidden",
+    "reply_to_addressesList": "hidden",
+    "review_productsList": "hidden",
+    "review_widget_listingsList": "hidden",
+    "review_widgetsList": "hidden",
+    "reviewsList": "hidden",
+    "seasonsList": "hidden",
+    "servicesList": "hidden",
+    "site_listingsList": "hidden",
+    "site_nav_itemsList": "hidden",
+    "site_pagesList": "hidden",
+    "site_viewsList": "hidden",
+    "sitesCreated": {
+      "label": "New Site",
+      "description": "Triggers when a site is created.",
+      "inputFields": []
+    },
+    "sitesList": "hidden",
+    "sitesUpdated": {
+      "label": "Updated Site",
+      "description": "Triggers when a site is updated.",
+      "inputFields": []
+    },
+    "task_assigneesList": "hidden",
+    "task_template_assigneesList": "hidden",
+    "task_templatesList": "hidden",
+    "tasksCompleted": {
+      "label": "Task Completed",
+      "description": "Triggers when a task is completed.",
+      "inputFields": []
+    },
+    "tasksCreated": {
+      "label": "New Task",
+      "description": "Triggers when a task is created.",
+      "inputFields": []
+    },
+    "tasksList": "hidden",
+    "tasksUpdated": {
+      "label": "Updated Task",
+      "description": "Triggers when a task is updated.",
+      "inputFields": []
+    },
+    "taxesList": "hidden",
+    "user_profilesList": "hidden",
+    "webhook_notificationsList": "hidden",
+    "webhooksList": "hidden",
+    "widget_analyticsList": "hidden",
+    "widget_listingsList": "hidden",
+    "widgetsCreated": {
+      "label": "New Widget",
+      "description": "Triggers when a widget is created.",
+      "inputFields": []
+    },
+    "widgetsList": "hidden",
+    "widgetsUpdated": {
+      "label": "Updated Widget",
+      "description": "Triggers when a widget is updated.",
+      "inputFields": []
+    }
+  },
+  "creates": {
+    "attribute_optionsCreate": "hidden",
+    "attributesCreate": "hidden",
+    "booking_detailsCreate": "hidden",
+    "calendar_event_notesCreate": {
+      "label": "Create Calendar Event Note",
+      "description": "Adds a private note to a calendar event.",
+      "inputFields": [
+        "calendar_event_id string required dynamic:calendar_eventsList.id._label",
+        "note text required"
+      ]
+    },
+    "calendar_eventsUpdate": {
+      "label": "Update Calendar Event",
+      "description": "Updates a calendar event, for example to confirm or cancel it, or to change its dates.",
+      "inputFields": [
+        "id string required dynamic:calendar_eventsList.id._label",
+        "status string 3 choices",
+        "title string",
+        "notes text",
+        "start_date string",
+        "end_date string"
+      ]
+    },
+    "capacitiesCreate": "hidden",
+    "capacity_group_dependenciesCreate": "hidden",
+    "capacity_groupsCreate": "hidden",
+    "contact_bookingsCreate": "hidden",
+    "contactsCreate": {
+      "label": "Create Contact",
+      "description": "Creates a new contact.",
+      "inputFields": [
+        "first_name string",
+        "last_name string",
+        "email string",
+        "phone string",
+        "language string 32 choices",
+        "company_name string",
+        "street string",
+        "street2 string",
+        "zip string",
+        "city string",
+        "province string",
+        "state string",
+        "country string",
+        "notes text",
+        "sms_opt_in boolean"
+      ]
+    },
+    "contactsUpdate": {
+      "label": "Update Contact",
+      "description": "Updates the details of a contact.",
+      "inputFields": [
+        "id string required dynamic:contactsList.id._label",
+        "first_name string",
+        "last_name string",
+        "email string",
+        "phone string",
+        "language string 32 choices",
+        "company_name string",
+        "street string",
+        "street2 string",
+        "zip string",
+        "city string",
+        "province string",
+        "state string",
+        "country string",
+        "notes text",
+        "sms_opt_in boolean"
+      ]
+    },
+    "coupon_productsCreate": "hidden",
+    "coupon_servicesCreate": "hidden",
+    "coupon_usesCreate": "hidden",
+    "couponsCreate": "hidden",
+    "createProduct": {
+      "label": "Create Unit",
+      "description": "Creates a unit with sensible defaults. Your subscription is updated automatically.",
+      "inputFields": [
+        "name string required",
+        "rent_period string required 2 choices",
+        "timezone string required"
+      ]
+    },
+    "deleteProduct": {
+      "label": "Delete Unit",
+      "description": "Deletes a unit and its bookings. Your subscription is updated automatically. This can't be undone.",
+      "inputFields": [
+        "id string required dynamic:productsList.id._label"
+      ]
+    },
+    "external_calendarsCreate": "hidden",
+    "inviteMember": {
+      "label": "Invite Member",
+      "description": "Invites someone to your organization with the user role. They receive an email with a link to accept the invitation. Make members admin or superuser in the dashboard.",
+      "inputFields": [
+        "email string required",
+        "name string",
+        "language string 32 choices"
+      ]
+    },
+    "invoicesCreate": "hidden",
+    "line_item_taxesCreate": "hidden",
+    "line_itemsCreate": "hidden",
+    "message_templatesCreate": "hidden",
+    "paymentsCreate": "hidden",
+    "permissionsCreate": "hidden",
+    "price_calendar_entriesCreate": "hidden",
+    "pricing_widgetsCreate": "hidden",
+    "product_attribute_optionsCreate": "hidden",
+    "product_message_templatesCreate": "hidden",
+    "product_reply_to_addressesCreate": "hidden",
+    "product_servicesCreate": "hidden",
+    "refundsCreate": "hidden",
+    "reply_to_addressesCreate": "hidden",
+    "review_productsCreate": "hidden",
+    "review_widget_listingsCreate": "hidden",
+    "review_widgetsCreate": "hidden",
+    "reviewsCreate": "hidden",
+    "revokeMember": {
+      "label": "Revoke Member",
+      "description": "Removes a member with the user role from your organization. Revoke admins and superusers in the dashboard.",
+      "inputFields": [
+        "id string required dynamic:membersList.id._label"
+      ]
+    },
+    "seasonsCreate": "hidden",
+    "servicesCreate": "hidden",
+    "site_listingsCreate": "hidden",
+    "site_nav_itemsCreate": "hidden",
+    "site_pagesCreate": "hidden",
+    "task_assigneesCreate": "hidden",
+    "task_template_assigneesCreate": "hidden",
+    "task_templatesCreate": "hidden",
+    "tasksCreate": {
+      "label": "Create Task",
+      "description": "Creates a task for a calendar event.",
+      "inputFields": [
+        "calendar_event_id string required dynamic:calendar_eventsList.id._label",
+        "label string required",
+        "due_at datetime",
+        "schedule string 3 choices"
+      ]
+    },
+    "tasksUpdate": {
+      "label": "Update Task",
+      "description": "Updates a task. Set the completion time to mark it as completed.",
+      "inputFields": [
+        "id string required dynamic:tasksList.id._label",
+        "label string",
+        "due_at datetime",
+        "schedule string 3 choices",
+        "completed_at datetime"
+      ]
+    },
+    "taxesCreate": "hidden",
+    "webhooksCreate": "hidden",
+    "widget_listingsCreate": "hidden",
+    "widgetsCreate": "hidden"
+  },
+  "searches": {
+    "bookingsSearch": {
+      "label": "Find Booking",
+      "description": "Finds a booking by its reference.",
+      "inputFields": [
+        "reference string required"
+      ]
+    },
+    "calendar_eventsSearch": {
+      "label": "Find Calendar Event",
+      "description": "Finds a calendar event by its booking, unit or start date.",
+      "inputFields": [
+        "booking_id string dynamic:bookingsList.id._label",
+        "product_id string dynamic:productsList.id._label",
+        "start_date string"
+      ]
+    },
+    "contactsSearch": {
+      "label": "Find Contact",
+      "description": "Finds a contact by email address, phone number or name.",
+      "inputFields": [
+        "email string",
+        "phone string",
+        "name string"
+      ]
+    },
+    "paymentsSearch": {
+      "label": "Find Payment",
+      "description": "Finds a payment by its reference or booking.",
+      "inputFields": [
+        "reference string",
+        "booking_id string dynamic:bookingsList.id._label"
+      ]
+    }
+  }
+}

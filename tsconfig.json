@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
     "exactOptionalPropertyTypes": true,
-    "lib": ["esnext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "lib": ["es2023"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noImplicitThis": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
-    "outDir": "./lib",
-    "rootDir": "./src",
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "skipLibCheck": true,
     "strict": true,
-    "target": "es2019"
-  }
+    "target": "es2023",
+    "types": ["node"],
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src", "test", "scripts", "vitest.config.mts"]
 }
