@@ -53,5 +53,6 @@ Keep trigger and action keys stable: Zaps refer to them, so a renamed key breaks
 ## Notes
 
 - `pnpm-workspace.yaml` sets `nodeLinker: hoisted`, because the Zapier CLI can't package pnpm's symlinked `node_modules`.
-- Zapier runs the integration on Node 22, so CI uses Node 22 too.
+- Zapier runs the integration on Node 22, so CI uses Node 22 too, and `@types/node` stays on 22.x.
+- Update dependencies by hand: run `pnpm update --latest`, set `@types/node` back to the latest 22.x, then run `pnpm test` and `pnpm validate`. Zapier retires old `zapier-platform-*` versions, so update those at least every few months.
 - Find the Zapier CLI docs at https://docs.zapier.com/platform/reference/cli.
