@@ -10,6 +10,10 @@ updates:
     groups:
       zapier:
         patterns: ["zapier-platform-*"]
+    ignore:
+      # Matches the Node version Zapier runs the integration on
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
