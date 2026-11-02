@@ -22570,7 +22570,7 @@
         }
       },
       "rowFilter.sites.logo_alt": {
-        "description": "Alt text of the logo image",
+        "description": "URL of the logo image for dark backgrounds",
         "in": "query",
         "name": "logo_alt",
         "required": false,
@@ -23610,7 +23610,7 @@
         }
       },
       "rowFilter.organizations.logo_alt": {
-        "description": "Alt text of the logo image",
+        "description": "URL of the logo image for dark backgrounds",
         "in": "query",
         "name": "logo_alt",
         "required": false,
@@ -28177,7 +28177,6 @@
             "description": "Subject of the email"
           },
           "body": {
-            "default": "",
             "format": "text",
             "type": "string",
             "description": "Body of the message"
