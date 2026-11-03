@@ -22570,7 +22570,7 @@
         }
       },
       "rowFilter.sites.logo_alt": {
-        "description": "Alt text of the logo image",
+        "description": "URL of the logo image for dark backgrounds",
         "in": "query",
         "name": "logo_alt",
         "required": false,
@@ -23610,7 +23610,7 @@
         }
       },
       "rowFilter.organizations.logo_alt": {
-        "description": "Alt text of the logo image",
+        "description": "URL of the logo image for dark backgrounds",
         "in": "query",
         "name": "logo_alt",
         "required": false,
@@ -26284,7 +26284,7 @@
             ],
             "format": "public.attribute_type",
             "type": "string",
-            "description": "Type of the attribute: `single-select` or `multi-select`"
+            "description": "Type of the attribute"
           },
           "organization_id": {
             "format": "uuid",
@@ -26560,7 +26560,7 @@
             ],
             "format": "public.booking_method",
             "type": "string",
-            "description": "Method used to make the booking: `request` or `book`"
+            "description": "Method used to make the booking"
           },
           "site_id": {
             "format": "uuid",
@@ -27819,7 +27819,7 @@
             ],
             "format": "public.fee_type",
             "type": "string",
-            "description": "Type of the fee: `fee` or `deposit`"
+            "description": "Type of the fee"
           },
           "service_id": {
             "format": "uuid",
@@ -28086,7 +28086,7 @@
             ],
             "format": "public.message_type",
             "type": "string",
-            "description": "Type of the message: `email` or `sms`"
+            "description": "Type of the message"
           },
           "past_schedule_behavior": {
             "default": "send",
@@ -28177,7 +28177,6 @@
             "description": "Subject of the email"
           },
           "body": {
-            "default": "",
             "format": "text",
             "type": "string",
             "description": "Body of the message"
@@ -28219,7 +28218,7 @@
             ],
             "format": "public.message_type",
             "type": "string",
-            "description": "Type of the message: `email` or `sms`"
+            "description": "Type of the message"
           },
           "booking_id": {
             "format": "uuid",
@@ -28277,7 +28276,7 @@
             ],
             "format": "public.organization_calendar_log_status",
             "type": "string",
-            "description": "Result of the request, e.g. `success`"
+            "description": "Result of the request"
           },
           "params": {
             "format": "jsonb",
@@ -28416,7 +28415,7 @@
             ],
             "format": "public.subscription_type",
             "type": "string",
-            "description": "How the subscription is paid: `trial`, `paddle`, `pre-paid` or `test`"
+            "description": "How the subscription is paid"
           },
           "name": {
             "format": "jsonb",
@@ -28569,7 +28568,7 @@
             ],
             "format": "public.review_status",
             "type": "string",
-            "description": "Status of new reviews: `pending` or `approved`"
+            "description": "Status of new reviews"
           },
           "review_prompt": {
             "format": "jsonb",
@@ -29017,7 +29016,7 @@
             "format": "public.payment_status",
             "type": "string",
             "readOnly": true,
-            "description": "Status of the payment: `due`, `paid` or `cancelled`"
+            "description": "Status of the payment"
           }
         },
         "type": "object",
@@ -29490,7 +29489,7 @@
             ],
             "format": "public.product_calendar_log_status",
             "type": "string",
-            "description": "Result of the request, e.g. `success`"
+            "description": "Result of the request"
           },
           "params": {
             "format": "jsonb",
@@ -29843,7 +29842,7 @@
             ],
             "format": "public.booking_method",
             "type": "string",
-            "description": "How guests book the unit: `request` or `book`"
+            "description": "How guests book the unit"
           },
           "request_status": {
             "default": "TENTATIVE",
@@ -29896,7 +29895,7 @@
             ],
             "format": "public.booking_method",
             "type": "string",
-            "description": "How guests book tentative dates: `request` or `book`"
+            "description": "How guests book tentative dates"
           },
           "fee": {
             "format": "jsonb",
@@ -30041,7 +30040,7 @@
             ],
             "format": "public.refund_status",
             "type": "string",
-            "description": "Status of the refund, either `pending` or `completed`"
+            "description": "Status of the refund"
           },
           "policy": {
             "format": "jsonb",
@@ -30221,7 +30220,7 @@
             ],
             "format": "public.review_widget_layout",
             "type": "string",
-            "description": "Layout of the reviews: `grid`, `list` or `summary`"
+            "description": "Layout of the reviews"
           },
           "organization_id": {
             "format": "uuid",
@@ -30367,7 +30366,7 @@
             ],
             "format": "public.review_status",
             "type": "string",
-            "description": "Moderation status: `pending`, `approved` or `rejected`. Review widgets only show approved reviews"
+            "description": "Moderation status. Review widgets only show approved reviews"
           },
           "source": {
             "format": "text",
@@ -30662,7 +30661,7 @@
             ],
             "format": "public.site_nav_item_target",
             "type": "string",
-            "description": "Where the link opens: `_self` or `_blank`"
+            "description": "Where the link opens"
           },
           "url": {
             "format": "jsonb",
@@ -30947,7 +30946,7 @@
             ],
             "format": "public.channel_rate_location",
             "type": "string",
-            "description": "Where rates are shown in the calendar: `inline` or `tooltip`"
+            "description": "Where rates are shown in the calendar"
           },
           "rate_visibility": {
             "default": "available",
@@ -30958,7 +30957,7 @@
             ],
             "format": "public.channel_rate_visibility",
             "type": "string",
-            "description": "Which rates the calendar shows: `all`, `available` or `none`"
+            "description": "Which rates the calendar shows"
           },
           "show_branding": {
             "default": true,
@@ -31095,7 +31094,7 @@
             ],
             "format": "public.channel_type",
             "type": "string",
-            "description": "Type of the site: `single-unit-site` or `multi-unit-site`"
+            "description": "Type of the site"
           },
           "pricing_version": {
             "default": "V0",
@@ -31515,7 +31514,7 @@
             ],
             "format": "public.tax_type",
             "type": "string",
-            "description": "Type of the tax: `on-top` or `included`"
+            "description": "Type of the tax"
           }
         },
         "type": "object",
@@ -31723,7 +31722,7 @@
             ],
             "format": "public.webhook_notification_status",
             "type": "string",
-            "description": "Status of the notification: `pending`, `sent` or `error`"
+            "description": "Status of the notification"
           },
           "response": {
             "format": "text",
@@ -31816,7 +31815,7 @@
           }
         },
         "type": "object",
-        "description": "Endpoints that are notified as soon as certain events happen in Bookingmood. See [our documentation](/docs/integrations/webhooks) for how webhooks work"
+        "description": "Endpoints that are notified as soon as certain events happen in Bookingmood. See [our documentation](/docs/developers/webhooks) for how webhooks work"
       },
       "widget_analytics": {
         "required": [
@@ -31972,7 +31971,7 @@
             ],
             "format": "public.channel_type",
             "type": "string",
-            "description": "Type of the widget: `calendar`, `timeline`, `inventory` or `search`"
+            "description": "Type of the widget"
           },
           "organization_id": {
             "format": "uuid",

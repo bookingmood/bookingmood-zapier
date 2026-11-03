@@ -33,3 +33,15 @@ Rebuild on the public OpenAPI spec of the Bookingmood API.
 - Only ask for an API key. The organization is derived from it, and names the connection.
 - Hide the generic create actions of other tables. Existing Zaps that use them keep working. Remove those of tables that no longer exist.
 - Sample data of Calendar Event Confirmed/Cancelled, Payment Paid and Task Completed only lists matching rows.
+
+## 2.0.1
+
+Update the Zapier platform to 19.3.0. This is the first public 2.0 release, so it brings the changes of 2.0.0:
+
+- Fix Create Unit and Invite Member, which called endpoints that no longer exist.
+- Add Revoke Member and Delete Unit.
+- Add Update Contact, Update Calendar Event and Update Task.
+- Add Find Booking, Find Calendar Event, Find Contact and Find Payment.
+- Only ask for an API key. The organization is derived from it, and names the connection.
+- Hide the generic create actions of other tables. Existing Zaps that use them keep working. Remove those of tables that no longer exist.
+- Sample data of Calendar Event Confirmed/Cancelled, Payment Paid and Task Completed only lists matching rows.

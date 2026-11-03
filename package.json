@@ -1,6 +1,6 @@
 {
   "name": "bookingmood-zapier",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Bookingmood Zapier integration",
   "main": "index.js",
   "private": true,
@@ -16,7 +16,7 @@
     "validate": "pnpm build && zapier-platform validate"
   },
   "dependencies": {
-    "zapier-platform-core": "19.2.1"
+    "zapier-platform-core": "19.3.0"
   },
   "devDependencies": {
     "@types/node": "22.20.5",
@@ -24,7 +24,7 @@
     "prettier": "3.9.10",
     "typescript": "7.0.2",
     "vitest": "5.0.5",
-    "zapier-platform-cli": "19.2.1"
+    "zapier-platform-cli": "19.3.0"
   },
   "packageManager": "pnpm@12.15.0"
 }
