@@ -3,11 +3,12 @@
     "api_key"
   ],
   "triggers": {
+    "activity_logList": "hidden",
     "api_requestsList": "hidden",
     "attribute_optionsList": "hidden",
     "attributesList": "hidden",
     "booking_detailsList": "hidden",
-    "booking_updatesList": "hidden",
+    "booking_price_snapshotsList": "hidden",
     "bookingsCreated": {
       "label": "New Booking",
       "description": "Triggers when a booking is created.",
@@ -20,8 +21,8 @@
       "inputFields": []
     },
     "calendar_event_notesList": "hidden",
-    "calendar_event_updatesList": "hidden",
     "calendar_eventsList": "hidden",
+    "calendar_feed_readsList": "hidden",
     "calendarEventsCancelled": {
       "label": "Calendar Event Cancelled",
       "description": "Triggers when a calendar event is cancelled.",
@@ -89,7 +90,7 @@
     "message_eventsList": "hidden",
     "message_templatesList": "hidden",
     "messagesList": "hidden",
-    "organization_calendar_logsList": "hidden",
+    "organization_snapshotsList": "hidden",
     "organizationsList": "hidden",
     "paddle_plansList": "hidden",
     "paddle_subscriptionsList": "hidden",
@@ -114,7 +115,6 @@
     "pricelabs_pricingList": "hidden",
     "pricing_widgetsList": "hidden",
     "product_attribute_optionsList": "hidden",
-    "product_calendar_logsList": "hidden",
     "product_message_templatesList": "hidden",
     "product_reply_to_addressesList": "hidden",
     "product_servicesList": "hidden",
